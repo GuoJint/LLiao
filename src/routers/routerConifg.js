@@ -11,9 +11,9 @@ const routes = [
                 component:()=>import('../views/Chat.vue'),
             },
             {
-                path:'/MailList',
-                name:'MailList',
-                component:()=>import('../views/MailList.vue'),
+                path:'/Contacts',
+                name:'Contacts',
+                component:()=>import('../views/Contacts.vue'),
             },
             {
                 path:'/WechatMoments',

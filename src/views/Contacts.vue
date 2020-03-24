@@ -1,13 +1,13 @@
 <template>
-    <div class="WechatMoments">
-        WechatMoments
+    <div class="Contacts">
+        Contacts
     </div>
 </template>
 
 <script>
 export default {
-    name: 'WechatMoments',
-    data() { 
+    name: 'Contacts',
+    data() {    
         return {
 
         }

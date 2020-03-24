@@ -1,7 +1,14 @@
 <template>
     <div class="home">
-        <nav-left-a></nav-left-a>
-        <router-view></router-view>
+        <el-container>
+            <el-aside>
+                <nav-left-a></nav-left-a>
+            </el-aside>
+            <el-main>
+                <router-view></router-view>
+            </el-main>
+        </el-container>
+
     </div>
 </template>
 
@@ -19,3 +26,13 @@ export default {
     }
 }
 </script>
+<style lang="scss">
+.home{
+    .el-container{
+        .el-aside{
+            height: 100vh;
+            width: 120px !important;
+        }
+    }
+}
+</style>
