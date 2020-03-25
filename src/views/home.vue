@@ -33,6 +33,9 @@ export default {
             height: 100vh;
             width: 120px !important;
         }
+        .el-main{
+            padding: 0;
+        }
     }
 }
 </style>

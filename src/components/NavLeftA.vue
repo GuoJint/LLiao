@@ -4,7 +4,7 @@
         <i class="iconfont" :class="Chat" @click="toChat">&#xe624;</i>
         <i class="iconfont" :class="Contacts" @click="toContacts">&#xe605;</i>
         <i class="iconfont" :class="WechatMoments" @click="toWechatMoments">&#xe61f;</i>
-        <i class="iconfont" >&#xe643;</i>
+        <i class="iconfont setting" >&#xe643;</i>
     </div>
 </template>
 
@@ -84,7 +84,7 @@ export default {
         margin: 0;
         position: absolute;
         bottom: 20px;
-        left: 35px;
+        left: 40px;
     }
     .active{
         color: #07C160;
