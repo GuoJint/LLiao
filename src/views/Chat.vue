@@ -1,7 +1,7 @@
 <template>
     <div class="Chat">
         <div class="chatAside">
-            <div class="asdeInput">
+            <div class="asideInput ">
                 <div class="CardInputContainer">
                     <el-autocomplete
                         v-model="state"
@@ -13,41 +13,50 @@
                     <i class="GroupChat el-icon-plus"></i>
                 </div>
             </div>
-            <div class="asideCard">
-                <div class="CardContainer">
-                    <div class="CardL">
-                        <img src="../assets/img1.jpg" alt="头像">
-                    </div>
-                    <div class="CardM">
-                        <div>
-                            <h4>Noble</h4>
-                            <p>sdsddsds</p>
+            <div class="tofixed"></div>
+            <div class="asideCard" v-for="(item,index) in chatList" :key="index">
+                    <div class="CardContainer">
+                        <div class="CardL">
+                            <img src="../assets/img1.jpg" alt="头像">
                         </div>
-                    </div>
-                    <div class="CardR">
-                        <p>14:30</p>
+                        <div class="CardM">
+                            <div>
+                                <h4>{{item.name}}</h4>
+                                <p>{{item.lastChat}}</p>
+                            </div>
+                        </div>
+                        <div class="CardR">
+                            <p>{{item.time}}</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         <div class="chatMain">chatMain</div>
     </div>
 </template>
 
 <script>
-import {searchRequest , loadRequest} from '../api/chat'
+import {searchRequest , loadRequest , chatListRequest} from '../api/chat'
 export default {
     name: 'Chat',
     data() { 
         return {
             state:'',
-            searchResults:[]
+            searchResults:[],
+            chatList:[]
         }
     },
     mounted(){
         this.loadResults()
+        this.getChatList()
     },
     methods:{
+        getChatList(){
+            chatListRequest().then((res)=>{
+                console.log(res.data)
+                this.chatList = res.data
+            })
+        },
         loadResults() {
             loadRequest().then((res)=>{
                 console.log(res.data)
@@ -88,14 +97,22 @@ export default {
 .Chat{
     display: flex;
     .chatAside{
+        overflow-y: scroll;
         width: 300px;
         height: 100vh;
         background-color: #EEEAE8;
-        .asdeInput{
-            width: 100%;
-            height: 70px;
+        .tofixed{
+            width: 283px;
+            height: 100px;
+        }
+        .asideInput{
+            position: fixed;
+            z-index: 10;
+            width: 283px;
+            height: 100px;
+            background-color: #EEEAE8;
             .CardInputContainer{
-                margin-top: 30px;
+                margin: 30px 0;
                 display: flex;
                 justify-content: space-around;
                 .el-input__inner{
@@ -132,6 +149,9 @@ export default {
                         margin-left: 10px;
                     }
                     p{
+                        overflow: hidden;
+                        text-overflow:ellipsis;
+                        white-space: nowrap;
                         margin-top: 20px;
                     }
                 }
@@ -147,6 +167,7 @@ export default {
                     }
                 }
                 p{
+                    font-size: 14px;
                     color: #999999;
                 }
             }
@@ -155,8 +176,9 @@ export default {
             background-color: #D8D8D9;
         }
     }
-    .main{
+    .chatMain{
         flex: 1;
+
     }
 }
 </style>

@@ -44,4 +44,48 @@ Mock.mock('/api/chat/loadRequest',{
         }
     ]
 })
+Mock.mock('/api/chat/chatListRequest',{
+    data:[
+        {
+            name:Random.csentence( 1, 3 ),
+            lastChat:Random.csentence( 1, 13 ),
+            time:Random.date("H:mm")
+        },
+        {
+            name:Random.csentence( 1, 3 ),
+            lastChat:Random.csentence( 1, 13 ),
+            time:Random.date("H:mm")
+        },
+        {
+            name:Random.csentence( 1, 3 ),
+            lastChat:Random.csentence( 1, 13 ),
+            time:Random.date("H:mm")
+        },
+        {
+            name:Random.csentence( 1, 3 ),
+            lastChat:Random.csentence( 1, 13 ),
+            time:Random.date("H:mm")
+        },
+        {
+            name:Random.csentence( 1, 3 ),
+            lastChat:Random.csentence( 1, 13 ),
+            time:Random.date("H:mm")
+        },
+        {
+            name:Random.csentence( 1, 3 ),
+            lastChat:Random.csentence( 1, 13 ),
+            time:Random.date("H:mm")
+        },
+        {
+            name:Random.csentence( 1, 3 ),
+            lastChat:Random.csentence( 1, 13 ),
+            time:Random.date("H:mm")
+        },
+        {
+            name:Random.csentence( 1, 3 ),
+            lastChat:Random.csentence( 1, 13 ),
+            time:Random.date("H:mm")
+        },
+    ]
+})
 

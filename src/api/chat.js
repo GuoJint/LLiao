@@ -15,3 +15,9 @@ export const loadRequest = () => {
         method:'get',
     })
 }
+export const chatListRequest = () => {
+    return axios.request({
+        url:'/chat/chatListRequest',
+        method:'get',
+    })
+}

@@ -34,6 +34,7 @@ export default {
             width: 120px !important;
         }
         .el-main{
+            
             padding: 0;
         }
     }
