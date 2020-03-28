@@ -14,10 +14,10 @@
                 </div>
             </div>
             <div class="tofixed"></div>
-            <div class="asideCard" v-for="(item,index) in chatList" :key="index">
+            <div class="asideCard" v-for="(item,index) in chatList" :key="index" @click="changePeople(item.userID)">
                     <div class="CardContainer">
                         <div class="CardL">
-                            <img src="../assets/img1.jpg" alt="头像">
+                            <img :src="item.img" alt="头像">
                         </div>
                         <div class="CardM">
                             <div>
@@ -31,7 +31,9 @@
                     </div>
                 </div>
             </div>
-        <div class="chatMain">chatMain</div>
+        <div class="chatMain">
+            <router-view></router-view>
+        </div>
     </div>
 </template>
 
@@ -43,7 +45,7 @@ export default {
         return {
             state:'',
             searchResults:[],
-            chatList:[]
+            chatList:[],
         }
     },
     mounted(){
@@ -89,6 +91,10 @@ export default {
         //当选择之后触发的事件
         handleSelect(item) {
             console.log(item);
+        },
+        changePeople(userID){
+            // console.log(userID)
+            this.$router.push(`/Chat/${userID}`)
         }
     }
 }
@@ -173,7 +179,7 @@ export default {
             }
         }
         .asideCard:hover{
-            background-color: #D8D8D9;
+            background-color: #DEDCDB;
         }
     }
     .chatMain{

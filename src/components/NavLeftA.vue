@@ -41,21 +41,21 @@ export default {
             if(this.nowRouter !== 'Chat'){
                 this.nowRouter = 'Chat'
                 this.changeColor()
-                this.$router.push('Chat')
+                this.$router.push('/Chat')
             }
         },
         toContacts(){
             if(this.nowRouter !== 'Contacts'){
                 this.nowRouter = 'Contacts'
                 this.changeColor()
-                this.$router.push('Contacts')
+                this.$router.push('/Contacts')
             }
         },
         toWechatMoments(){
             if(this.nowRouter !== 'WechatMoments'){
                 this.nowRouter = 'WechatMoments'
                 this.changeColor()
-                this.$router.push('WechatMoments')
+                this.$router.push('/WechatMoments')
             }
         }
     },

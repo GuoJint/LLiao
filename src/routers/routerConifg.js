@@ -9,14 +9,20 @@ const routes = [
                 path:'/Chat',
                 name:'Chat',
                 component:()=>import('../views/Chat.vue'),
+                children:[
+                    {
+                        path:':userID',
+                        component:()=>import('../views/chatRoom.vue'),
+                    }
+                ]
             },
             {
-                path:'/Contacts',
+                path:'Contacts',
                 name:'Contacts',
                 component:()=>import('../views/Contacts.vue'),
             },
             {
-                path:'/WechatMoments',
+                path:'WechatMoments',
                 name:'WechatMoments',
                 component:()=>import('../views/WechatMoments.vue'),
             },

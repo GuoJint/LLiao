@@ -47,44 +47,61 @@ Mock.mock('/api/chat/loadRequest',{
 Mock.mock('/api/chat/chatListRequest',{
     data:[
         {
+            
             name:Random.csentence( 1, 3 ),
             lastChat:Random.csentence( 1, 13 ),
-            time:Random.date("H:mm")
+            time:Random.date("H:mm"),
+            img:Random.dataImage(),
+            userID:Random.natural(60, 100)
         },
         {
             name:Random.csentence( 1, 3 ),
             lastChat:Random.csentence( 1, 13 ),
-            time:Random.date("H:mm")
+            time:Random.date("H:mm"),
+            img:Random.dataImage(),
+            userID:Random.natural(60, 100)
         },
         {
             name:Random.csentence( 1, 3 ),
             lastChat:Random.csentence( 1, 13 ),
-            time:Random.date("H:mm")
+            time:Random.date("H:mm"),
+            img:Random.dataImage(),
+            userID:Random.natural(60, 100)
         },
         {
             name:Random.csentence( 1, 3 ),
             lastChat:Random.csentence( 1, 13 ),
-            time:Random.date("H:mm")
+            time:Random.date("H:mm"),
+            img:Random.dataImage(),
+            userID:Random.natural(60, 100)
         },
         {
             name:Random.csentence( 1, 3 ),
             lastChat:Random.csentence( 1, 13 ),
-            time:Random.date("H:mm")
+            time:Random.date("H:mm"),
+            img:Random.dataImage(),
+            userID:Random.natural(60, 100)
         },
         {
             name:Random.csentence( 1, 3 ),
             lastChat:Random.csentence( 1, 13 ),
-            time:Random.date("H:mm")
+            time:Random.date("H:mm"),
+            img:Random.dataImage(),
+            userID:Random.natural(60, 100)
         },
         {
             name:Random.csentence( 1, 3 ),
             lastChat:Random.csentence( 1, 13 ),
-            time:Random.date("H:mm")
+            time:Random.date("H:mm"),
+            img:Random.dataImage(),
+            userID:Random.natural(60, 100)
         },
         {
             name:Random.csentence( 1, 3 ),
             lastChat:Random.csentence( 1, 13 ),
-            time:Random.date("H:mm")
+            time:Random.date("H:mm"),
+            img:Random.dataImage(),
+            userID:Random.natural(60, 100)
         },
     ]
 })
