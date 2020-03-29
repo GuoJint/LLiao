@@ -14,25 +14,30 @@
                 </div>
             </div>
             <div class="tofixed"></div>
-            <div class="asideCard" v-for="(item,index) in chatList" :key="index" @click="changePeople(item.userID)">
-                    <div class="CardContainer">
-                        <div class="CardL">
-                            <img :src="item.img" alt="头像">
+            <div 
+            class="asideCard" 
+            ref=indexList  
+            v-for="(item,index) in chatList" :key="index" 
+            @click="changePeople(item.userID,index,item)
+            ">
+                <div class="CardContainer">
+                    <div class="CardL">
+                        <img :src="item.img" alt="头像">
+                    </div>
+                    <div class="CardM">
+                        <div>
+                            <h4>{{item.name}}</h4>
+                            <p>{{item.lastChat}}</p>
                         </div>
-                        <div class="CardM">
-                            <div>
-                                <h4>{{item.name}}</h4>
-                                <p>{{item.lastChat}}</p>
-                            </div>
-                        </div>
-                        <div class="CardR">
-                            <p>{{item.time}}</p>
-                        </div>
+                    </div>
+                    <div class="CardR">
+                        <p>{{item.time}}</p>
                     </div>
                 </div>
             </div>
+        </div>
         <div class="chatMain">
-            <router-view></router-view>
+            <router-view :nowItem="nowItem"></router-view>
         </div>
     </div>
 </template>
@@ -46,6 +51,8 @@ export default {
             state:'',
             searchResults:[],
             chatList:[],
+            selection:'',
+            nowItem:''
         }
     },
     mounted(){
@@ -53,15 +60,15 @@ export default {
         this.getChatList()
     },
     methods:{
+        //获取联系人列表
         getChatList(){
             chatListRequest().then((res)=>{
-                console.log(res.data)
                 this.chatList = res.data
             })
         },
+        //获取搜索框预搜索列表
         loadResults() {
             loadRequest().then((res)=>{
-                console.log(res.data)
                 this.searchResults = res.data
             })
         },
@@ -92,9 +99,17 @@ export default {
         handleSelect(item) {
             console.log(item);
         },
-        changePeople(userID){
-            // console.log(userID)
-            this.$router.push(`/Chat/${userID}`)
+        changePeople(userID,index,item){
+            //当点击同一次路由后不执行  此时通过route获取的userid为点击之前的所以当没有重复点击时userid也不同
+            if(userID != this.$route.params.userID){
+                //indexList为ref数组
+                this.nowItem = item
+                this.$refs.indexList.forEach(item => {
+                    item.style.backgroundColor = ""
+                });
+                this.$refs.indexList[index].style.backgroundColor = "#C9C6C6"
+                this.$router.push(`/Chat/${userID}`)
+            }
         }
     }
 }
@@ -184,7 +199,6 @@ export default {
     }
     .chatMain{
         flex: 1;
-
     }
 }
 </style>

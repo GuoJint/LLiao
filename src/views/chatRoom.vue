@@ -1,6 +1,33 @@
 <template>
     <div class="chatRoom" @click="test">
-        {{userID}}
+        <el-container>
+            <el-header>
+                <p>{{nowItem.name}}</p>
+
+            </el-header>
+            <el-main>
+                <div></div>
+            </el-main>
+            <el-footer>
+                <div class="tools">
+                    <div class="toolLeft">
+                        <i class="iconfont">&#xe613;</i>
+                        <i class="el-icon-folder-opened"></i>
+                        <i class="el-icon-scissors"></i>
+                        <i class="el-icon-chat-dot-round"></i>
+                    </div>
+                    <div class="toolRight">
+                        <i class="iconfont">&#xe659;</i>
+                        <i class="iconfont">&#xe617;</i>
+                    </div>
+                </div>
+                <el-input
+                type="textarea"
+                resize="none"
+                v-model="textarea">
+                </el-input>
+            </el-footer>
+        </el-container>
         
     </div>
 </template>
@@ -8,9 +35,13 @@
 <script>
 export default {
     name: 'chatRoom',
+    props:{
+        nowItem:Object
+    },
     data() { 
         return {
-            userID:''
+            userID:'',
+            textarea:''
         }
     },
     methods:{
@@ -25,3 +56,46 @@ export default {
     }
 }
 </script>
+<style lang="scss">
+.chatRoom{
+    height: 100vh;
+    display: flex;
+    .el-header{
+        background-color: #F5F5F5;
+        height:100px !important;
+        border-bottom: 1px solid #E7E7E7;
+        p{
+            line-height: 100px;
+            font-size: 20px;
+        }
+    }
+    .el-main{
+        flex: 1;
+        background-color: #F5F5F5;
+    }
+    .el-footer{
+        height: 200px !important;
+        .tools{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 50px;
+            i{
+                font-size: 20px;
+                margin: 0 10px;
+                color: #767676;
+                cursor: pointer;
+            }
+        }
+        .el-textarea{
+            .el-textarea__inner{
+                height: 150px;
+                padding: 5px 10px;
+                border: none;
+                color: #000000;
+                font-size: 18px;
+            }
+        }
+    }
+}
+</style>

@@ -6,6 +6,62 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1435425",
+      "name": "开心 笑脸 表情",
+      "font_class": "tubiaozhizuomoban",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "2127143",
+      "name": "微笑",
+      "font_class": "smile",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "8219237",
+      "name": "表情",
+      "font_class": "biaoqing2",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "36577",
+      "name": "裁剪",
+      "font_class": "jianqie",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "1638517",
+      "name": "视频",
+      "font_class": "shipin",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "2325926",
+      "name": "视频",
+      "font_class": "shipin1",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "3764006",
+      "name": "电话",
+      "font_class": "weibiaoti-",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "5379537",
+      "name": "电话",
+      "font_class": "dianhua",
+      "unicode": "e659",
+      "unicode_decimal": 58969
+    },
+    {
       "icon_id": "1164839",
       "name": "聊天",
       "font_class": "liaotian",
