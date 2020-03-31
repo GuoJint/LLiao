@@ -6,7 +6,66 @@
 
             </el-header>
             <el-main>
-                <div></div>
+                <div class="Left">
+                    <div class="LContainer">
+                        <img src="../assets/img1.jpg" alt="">
+                        <p>天天天郭晋廷</p>
+                    </div>
+                </div>
+                <div class="Right">
+                    <div class="RContainer">
+                        <p>少时诵诗书</p>
+                        <img src="../assets/img1.jpg" alt="">
+                    </div>
+                </div>
+                <div class="Right">
+                    <div class="RContainer">
+                        <p>天天天郭晋廷</p>
+                        <img src="../assets/img1.jpg" alt="">
+                    </div>
+                </div>
+                <div class="Left">
+                    <div class="LContainer">
+                        <img src="../assets/img1.jpg" alt="">
+                        <p>天天天郭晋廷</p>
+                    </div>
+                </div>
+                <div class="Right">
+                    <div class="RContainer">
+                        <p>天天天郭晋廷</p>
+                        <img src="../assets/img1.jpg" alt="">
+                    </div>
+                </div>
+                <div class="Left">
+                    <div class="LContainer">
+                        <img src="../assets/img1.jpg" alt="">
+                        <p>天天天郭晋廷</p>
+                    </div>
+                </div>
+                <div class="Right">
+                    <div class="RContainer">
+                        <p>天天天郭晋廷</p>
+                        <img src="../assets/img1.jpg" alt="">
+                    </div>
+                </div>
+                <div class="Left">
+                    <div class="LContainer">
+                        <img src="../assets/img1.jpg" alt="">
+                        <p>天天天郭晋廷</p>
+                    </div>
+                </div>
+                <div class="Right">
+                    <div class="RContainer">
+                        <p>天天天郭晋廷</p>
+                        <img src="../assets/img1.jpg" alt="">
+                    </div>
+                </div>
+                <div class="Left">
+                    <div class="LContainer">
+                        <img src="../assets/img1.jpg" alt="">
+                        <p>天天天郭晋廷</p>
+                    </div>
+                </div>
             </el-main>
             <el-footer>
                 <div class="tools">
@@ -72,6 +131,48 @@ export default {
     .el-main{
         flex: 1;
         background-color: #F5F5F5;
+        .Left{
+            margin-top:10px;
+            width: 100%;
+            height: 40px;
+            .LContainer{
+                float: left;
+                display: flex;
+                img{
+                    width: 40px;
+                    height: 40px;
+                }
+                p{
+                    background-color: #FFFFFF;
+                    font-size: 18px;
+                    height: 20px;
+                    padding: 10px;
+                    margin-left: 15px;
+                    border-radius: 5px;
+                }
+            }
+        }
+        .Right{
+            margin-top:10px;
+            width: 100%;
+            height: 60px;
+            .RContainer{
+                float: right;
+                display: flex;
+                img{
+                    width: 40px;
+                    height: 40px;
+                }
+                p{
+                    background-color: #98E165;
+                    font-size: 18px;
+                    height: 20px;
+                    padding: 10px;
+                    margin-right: 15px;
+                    border-radius: 5px;
+                }
+            }
+        }
     }
     .el-footer{
         height: 200px !important;

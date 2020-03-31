@@ -20,6 +20,12 @@ const routes = [
                 path:'Contacts',
                 name:'Contacts',
                 component:()=>import('../views/Contacts.vue'),
+                children:[
+                    {
+                        path:':userID',
+                        component:()=>import('../views/userCard.vue'),
+                    }
+                ]
             },
             {
                 path:'WechatMoments',
