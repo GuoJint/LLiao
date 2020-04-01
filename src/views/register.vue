@@ -187,7 +187,7 @@ export default {
         }
         .verificationCode{
             .verificationCode-count{
-                width: 50%;
+                width: 45%;
             }
             .code{
                 margin-left: 7%;
