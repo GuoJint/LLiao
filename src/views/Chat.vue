@@ -44,6 +44,7 @@
 
 <script>
 import {searchRequest , loadRequest , chatListRequest} from '../api/chat'
+import { mapState} from 'vuex'
 export default {
     name: 'Chat',
     data() { 
@@ -59,10 +60,15 @@ export default {
         this.loadResults()
         this.getChatList()
     },
+    computed:{
+        ...mapState([
+            'userID'
+        ])
+    },
     methods:{
         //获取联系人列表
         getChatList(){
-            chatListRequest().then((res)=>{
+            chatListRequest(this.userID).then((res)=>{
                 this.chatList = res.data
             })
         },

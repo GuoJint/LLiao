@@ -14,24 +14,47 @@
                 </div>
             </div>
             <div class="tofixed"></div>
-            <div 
-            class="asideCard" 
-            ref=indexList  
-            v-for="(item,index) in chatList" :key="index" 
-            @click="changePeople(item.userID,index,item)
-            ">
-                <div class="CardContainer">
-                    <div class="CardL">
-                        <img :src="item.img" alt="头像">
-                    </div>
-                    <div class="CardM">
-                        <div>
-                            <h4>{{item.name}}</h4>
-                            <p>{{item.lastChat}}</p>
+            <!-- #中的内容 -->
+            <div>
+                <p class="classification">#</p>
+                <div 
+                class="asideCard" 
+                ref=indexListElse 
+                v-for="(item,index) in ContactsListElse" :key="index" 
+                @click="changePeopleElse(item.userID,index,item)
+                ">
+                    <div class="CardContainer">
+                        <div class="CardL">
+                            <img :src="item.img" alt="头像">
+                        </div>
+                        <div class="CardM">
+                            <div>
+                                <h4>{{item.name}}</h4>
+
+                            </div>
                         </div>
                     </div>
-                    <div class="CardR">
-                        <p>{{item.time}}</p>
+                </div>
+            </div>
+            <!-- A-B筛选内容 -->
+            <div v-for="(items,index) in ContactsList" :key="index">
+                <p class="classification">{{String.fromCharCode(index+65)}}</p>
+                <div 
+                class="asideCard" 
+                :id="item.name"
+                ref=indexList 
+                v-for="(item,index) in items" :key="index" 
+                @click="changePeople(item.userID,item.name,item)
+                ">
+                    <div class="CardContainer">
+                        <div class="CardL">
+                            <img :src="item.img" alt="头像">
+                        </div>
+                        <div class="CardM">
+                            <div>
+                                <h4>{{item.name}}</h4>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -43,27 +66,37 @@
 </template>
 
 <script>
-import {searchRequest , loadRequest , chatListRequest} from '../api/chat'
+import {searchRequest , loadRequest , ContactsListRequest , ContactsListRequestElse} from '../api/Contacts'
+import { mapState } from 'vuex'
 export default {
     name: 'Contacts',
     data() { 
         return {
             state:'',
             searchResults:[],
-            chatList:[],
+            ContactsList:[],
+            ContactsListElse:[],
             selection:'',
             nowItem:''
         }
     },
     mounted(){
         this.loadResults()
-        this.getChatList()
+        this.getContactsList()
+    },
+    computed:{
+        ...mapState([
+            'userID'
+        ])
     },
     methods:{
         //获取联系人列表
-        getChatList(){
-            chatListRequest().then((res)=>{
-                this.chatList = res.data
+        getContactsList(){
+            ContactsListRequest(this.userID).then((res)=>{
+                this.ContactsList = res.data
+            })
+            ContactsListRequestElse(this.userID).then((res)=>{
+                this.ContactsListElse = res.data
             })
         },
         //获取搜索框预搜索列表
@@ -99,15 +132,29 @@ export default {
         handleSelect(item) {
             console.log(item);
         },
-        changePeople(userID,index,item){
+        changePeople(userID,name,item){
+            //当点击同一次路由后不执行  此时通过route获取的userid为点击之前的所以当没有重复点击时userid也不同
+            if(userID != this.$route.params.userID){
+                this.nowItem = item
+                this.$refs.indexList.forEach(item => {
+                    if(item.id == name)  {
+                        item.style.backgroundColor = "#C9C6C6"
+                    }else{
+                        item.style.backgroundColor = ""
+                    }
+                });
+                this.$router.push(`/Contacts/${userID}`)
+            }
+        },
+        changePeopleElse(userID,index,item){
             //当点击同一次路由后不执行  此时通过route获取的userid为点击之前的所以当没有重复点击时userid也不同
             if(userID != this.$route.params.userID){
                 //indexList为ref数组
                 this.nowItem = item
-                this.$refs.indexList.forEach(item => {
+                this.$refs.indexListElse.forEach(item => {
                     item.style.backgroundColor = ""
                 });
-                this.$refs.indexList[index].style.backgroundColor = "#C9C6C6"
+                this.$refs.indexListElse[index].style.backgroundColor = "#C9C6C6"
                 this.$router.push(`/Contacts/${userID}`)
             }
         }
@@ -166,18 +213,10 @@ export default {
                 }
                 .CardM{
                     width: calc(100% - 120px);
-                    h4,p{
-                        margin-left: 10px;
+                    h4{
+                        line-height: 70px;
+                        margin-left: 20px;
                     }
-                    p{
-                        overflow: hidden;
-                        text-overflow:ellipsis;
-                        white-space: nowrap;
-                        margin-top: 20px;
-                    }
-                }
-                .CardR{
-                    width: 50px;
                 }
                 .CardL{
                     width: 70px;
@@ -195,6 +234,11 @@ export default {
         }
         .asideCard:hover{
             background-color: #DEDCDB;
+        }
+        .classification{
+            margin-left: 20px;
+            color: #999999;
+            cursor: default;
         }
     }
     .ContactsMain{

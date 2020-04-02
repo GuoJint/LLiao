@@ -10,16 +10,16 @@
                 </div>
                 <div class="CMain">
                     <div>
-                        <span class="space">备注</span>
-                        <p>asdas</p>
+                        <span>备注</span>
+                        <p>{{nowItem.marker}}</p>
                     </div>
                     <div>
-                        <span class="space">地区</span>
-                        <p>asdas</p>
+                        <span>地区</span>
+                        <p>{{nowItem.region}}</p>
                     </div>
                     <div>
-                        <span>微信号</span>
-                        <p>asdas</p>
+                        <span>账号</span>
+                        <p>{{nowItem.account}}</p>
                     </div>
                 </div>
                 <div class="CFooter">
@@ -33,7 +33,7 @@
 export default {
     name: 'userCard',
     props:{
-        nowItem:String
+        nowItem:Object
     },
     data() { 
         return {
@@ -83,9 +83,6 @@ export default {
             flex-direction: column;
             div{
                 margin-bottom: 20px;
-                .space{
-                    margin-right: 155px;
-                }
                 span{
                     color: #9999B9;
                     margin-right: 140px;

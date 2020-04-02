@@ -25,6 +25,8 @@
 
 <script>
 import {loginReuqest} from '../api/login.js'
+import { setToken } from '../lib/utils'
+import { mapMutations} from 'vuex'
 export default {
     name: 'login',
     data() { 
@@ -39,6 +41,9 @@ export default {
         this.screenHeight()
     },
     methods:{
+        ...mapMutations([
+            'SET_USERID'
+        ]),
         screenHeight(){
             var h =  document.documentElement.clientHeight;
             var loginH = document.getElementById('loginH')
@@ -51,7 +56,8 @@ export default {
                     userPassword:this.userPassword
                 }).then(res=>{
                     // console.log(res)
-                    this.$cookies.set('token',res.data.token,'30s')
+                    setToken(res.token)
+                    this.SET_USERID(res.userID)
                     this.$router.push('/articleShow')
                 }).catch(err=>{
                     this.$message(err)

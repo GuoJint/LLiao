@@ -105,4 +105,329 @@ Mock.mock('/api/chat/chatListRequest',{
         },
     ]
 })
+Mock.mock('/api/Contacts/ContactsListRequestElse',{
+    data:[
+        {
+            
+            name:Random.csentence( 1, 3 ),
+            lastChat:Random.csentence( 1, 13 ),
+            time:Random.date("H:mm"),
+            img:Random.dataImage(),
+            userID:Random.natural(60, 100)
+        },
+        {
+            name:Random.csentence( 1, 3 ),
+            lastChat:Random.csentence( 1, 13 ),
+            time:Random.date("H:mm"),
+            img:Random.dataImage(),
+            userID:Random.natural(60, 100)
+        },
+    ]
+})
+Mock.mock('/api/Contacts/ContactsListRequest',{
+    data:[
+        [
+            {
+                chageColor:Random.natural(10, 100),
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100),
+                region:'ss',
+                marker:'aa',
+                account:'dd'
+            },
+        ],
+        [
+            {
+                chageColor:Random.natural(10, 100),
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+            {
+                chageColor:Random.natural(60, 100),
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+                chageColor:Random.natural(10, 100),
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+                chageColor:Random.natural(10, 100),
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+                chageColor:Random.natural(10, 100),
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+                chageColor:Random.natural(10, 100),
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+                chageColor:Random.natural(10, 100),
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+                chageColor:Random.natural(10, 100),
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+                chageColor:Random.natural(10, 100),
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+                chageColor:Random.natural(10, 100),
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+                chageColor:Random.natural(10, 100),
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+                chageColor:Random.natural(10, 100),
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+                chageColor:Random.natural(10, 100),
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100),
+                region:'ss',
+                marker:'aa',
+                account:'dd'
+            },
+        ],
+        [
+            {
+                chageColor:Random.natural(10, 100),
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+                chageColor:Random.natural(10, 100),
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+                chageColor:Random.natural(10, 100),
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+            
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+            
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+            
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+            
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+            
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+            
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+            
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+            
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+            
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+            {
+            
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+        [
+            {
+            
+                name:Random.csentence( 1, 3 ),
+                lastChat:Random.csentence( 1, 13 ),
+                time:Random.date("H:mm"),
+                img:Random.dataImage(),
+                userID:Random.natural(60, 100)
+            },
+        ],
+    ]
+})
+Mock.mock('/api/Contacts/search',{
+    data:[
+        {
+            value:'Noble'
+        },
+        {
+            value:'Noble2'
+        }
+    ]
+})
+Mock.mock('/api/Contacts/loadRequest',{
+    data:[
+        {
+            value:'Noble4'
+        },
+        {
+            value:'Noble5'
+        }
+    ]
+})
 

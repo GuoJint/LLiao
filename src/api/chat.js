@@ -15,9 +15,12 @@ export const loadRequest = () => {
         method:'get',
     })
 }
-export const chatListRequest = () => {
+export const chatListRequest = (userID) => {
     return axios.request({
         url:'/chat/chatListRequest',
-        method:'get',
+        method:'psot',
+        data:{
+            userID
+        }
     })
 }
