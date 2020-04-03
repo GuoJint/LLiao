@@ -25,7 +25,6 @@
 
 <script>
 import {loginReuqest} from '../api/login.js'
-import { setToken } from '../lib/utils'
 import { mapMutations} from 'vuex'
 export default {
     name: 'login',
@@ -51,13 +50,13 @@ export default {
         },
         submitForm(){
             if(this.ruleForm.acount||this.ruleForm.userPassword){
-                loginReuqest({
-                    username:this.acount,
-                    userPassword:this.userPassword
-                }).then(res=>{
+                console.log(this.ruleForm.acount)
+                console.log(this.ruleForm.userPassword)
+                loginReuqest(
+                    this.ruleForm.acount,
+                    this.ruleForm.userPassword
+                ).then(()=>{
                     // console.log(res)
-                    setToken(res.token)
-                    this.SET_USERID(res.userID)
                     this.$router.push('/articleShow')
                 }).catch(err=>{
                     this.$message(err)

@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import {sendCodeRequest , registerRequest} from '../api/register'
+import {sendCodeRequest , registerRequest } from '../api/register'
 export default {
     name: 'register',
     data() { 
@@ -90,7 +90,7 @@ export default {
                 ],
                 verificationCode:[
                     { required: true, message: '请输入验证码', trigger: 'blur' },
-                    { min: 0 , max: 4 , trigger:'blur'}
+                    { min: 0 , max: 6 , trigger:'blur'}
                 ],
             }
         }
@@ -108,9 +108,9 @@ export default {
             let flag = this.judgeCode(this.ruleForm.phone)
             // console.log(flag)
             if(flag){
-                sendCodeRequest({
-                    phone:this.ruleForm.phone
-                }).then((res)=>{
+                sendCodeRequest(
+                        parseInt(this.ruleForm.phone)
+                ).then((res)=>{
                     this.$message({
                         message:res.data.message,
                         type:'success'
@@ -126,6 +126,8 @@ export default {
                         }
                         this.time -= 1
                     },100)
+                }).catch((error)=>{
+                    console.log(error)
                 })
             }else{
                 this.$message.error("请输入正确的手机格式")
@@ -150,14 +152,18 @@ export default {
             }
         },
         submitForm(formName){
+            let that = this.ruleForm
             this.$refs[formName].validate((valid)=>{
                 if(valid){
-                    registerRequest({
-                        acount:this.ruleForm.account,
-                        userPassword:this.ruleForm.userPassword,
-                        phone:this.ruleForm.phone,
-                        code:this.ruleForm.verificationCode
-                    }).then((res)=>{
+                    console.log(this)
+                    console.log(that)
+                    console.log(that.account)
+                    registerRequest(
+                        that.account,
+                        that.userPassword,
+                        that.phone,
+                        that.verificationCode
+                    ).then((res)=>{
                         this.$message({
                             message:res.data.message,
                             type:'success'

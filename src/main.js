@@ -9,7 +9,7 @@ import GeminiScrollbar from 'vue-gemini-scrollbar'
 // import 'mavon-editor/dist/css/index.css'
 import './assets/icon/iconfont.css'
 
-const mock = true;
+const mock = false;
 if(mock){
   require('./mock/api')
 }

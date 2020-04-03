@@ -37,12 +37,14 @@
             </div>
         </div>
         <div class="chatMain">
-            <router-view :nowItem="nowItem"></router-view>
+            <router-view :nowItem="nowItem" :ws="ws"></router-view>
         </div>
     </div>
 </template>
 
 <script>
+//删除添加节点的方式，onmessage收到的res如果为数组，0，1,2分别处理不同事物，比如0里面的数据用来接收当前用户消息，1里面的数据用来接收未读消息
+//当index为1时对获取未读消息的fromID把对应id节点删除掉，再重新添加置顶一个节点
 import {searchRequest , loadRequest , chatListRequest} from '../api/chat'
 import { mapState} from 'vuex'
 export default {
@@ -53,12 +55,14 @@ export default {
             searchResults:[],
             chatList:[],
             selection:'',
-            nowItem:''
+            nowItem:'',
+            ws:''
         }
     },
     mounted(){
         this.loadResults()
         this.getChatList()
+        this.webscoket()
     },
     computed:{
         ...mapState([
@@ -68,9 +72,9 @@ export default {
     methods:{
         //获取联系人列表
         getChatList(){
-            chatListRequest(this.userID).then((res)=>{
-                this.chatList = res.data
-            })
+                chatListRequest(this.userID).then((res)=>{
+                    this.chatList = res.data
+                })
         },
         //获取搜索框预搜索列表
         loadResults() {
@@ -116,6 +120,16 @@ export default {
                 this.$refs.indexList[index].style.backgroundColor = "#C9C6C6"
                 this.$router.push(`/Chat/${userID}`)
             }
+        },
+        webscoket(){
+            console.log(window)
+            console.log("webscoket" in window)
+            var ws = new WebSocket("ws://localhost:8080/")
+            this.ws = ws
+            ws.onmessage = function(event){
+                console.log(event)
+            }
+            // console.log(ws)
         }
     }
 }

@@ -1,11 +1,11 @@
 import axios from './index'
 
-export const sendCodeRequest = (phone)=>{
+export const sendCodeRequest = ()=>{
     return axios.request({
         url:'/register/code',
         method:'post',
         data:{
-            phone
+            "phone":13720904717
         }
     })
 }

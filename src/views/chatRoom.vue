@@ -81,10 +81,13 @@
                     </div>
                 </div>
                 <el-input
+                id="sendmsgBykey"
                 type="textarea"
                 resize="none"
-                v-model="textarea">
+                v-model="textarea"
+                >
                 </el-input>
+                <button class="sendButton" @click="sendByClick">发送消息</button>
             </el-footer>
         </el-container>
         
@@ -95,7 +98,8 @@
 export default {
     name: 'chatRoom',
     props:{
-        nowItem:Object
+        nowItem:Object,
+        ws:Object
     },
     data() { 
         return {
@@ -103,9 +107,27 @@ export default {
             textarea:''
         }
     },
+    mounted(){
+        this.submit()
+    },
     methods:{
         test(){
             console.log(this.$route.params.userID)
+        },
+        submit(){
+            document.getElementById('sendmsgBykey').addEventListener('keydown',(event)=>{
+                if(event.ctrlKey &&event.keyCode ==13){
+                    console.log(this.ws)
+                    this.ws.onopen = function(){
+                        this.ws.send(this.textarea)
+                    }
+                }
+            })
+        },
+        sendByClick(){
+            this.ws.onopen = function(){
+                this.ws.send(this.textarea)
+            }
         }
     },
     watch:{
@@ -176,6 +198,7 @@ export default {
     }
     .el-footer{
         height: 200px !important;
+        position: relative;
         .tools{
             display: flex;
             justify-content: space-between;
@@ -196,6 +219,18 @@ export default {
                 color: #000000;
                 font-size: 18px;
             }
+        }
+        .sendButton{
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 80px;
+            height: 30px;
+            background-color: #F5F5F5;
+            border: 1px solid #E5E5E5;
+        }
+        .sendButton:hover{
+            background-color: #98E165;
         }
     }
 }
