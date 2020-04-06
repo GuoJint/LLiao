@@ -7,7 +7,7 @@
                 </el-input>
             </el-form-item >
             <el-form-item label="密码" prop="userPassword" class="container-item">
-                <el-input v-model="ruleForm.userPassword" autocomplete="off">
+                <el-input v-model="ruleForm.userPassword" autocomplete="off" type="password">
                     
                 </el-input>
             </el-form-item>
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import {loginReuqest} from '../api/login.js'
+import {loginReuqest } from '../api/login.js'
 import { mapMutations} from 'vuex'
 export default {
     name: 'login',
@@ -38,11 +38,20 @@ export default {
     },
     mounted(){
         this.screenHeight()
+        // this.ifPassDate()
     },
     methods:{
         ...mapMutations([
             'SET_USERID'
         ]),
+        // ifPassDate(){
+        //     authorizationRequest().then(res =>{
+        //         console.log(res.status !== 500)
+        //         if(res.status !== 500){
+        //             this.$router.push('/Chat')
+        //         }
+        //     })
+        // },
         screenHeight(){
             var h =  document.documentElement.clientHeight;
             var loginH = document.getElementById('loginH')
@@ -50,14 +59,16 @@ export default {
         },
         submitForm(){
             if(this.ruleForm.acount||this.ruleForm.userPassword){
-                console.log(this.ruleForm.acount)
-                console.log(this.ruleForm.userPassword)
                 loginReuqest(
                     this.ruleForm.acount,
                     this.ruleForm.userPassword
-                ).then(()=>{
+                ).then((res)=>{
                     // console.log(res)
-                    this.$router.push('/articleShow')
+                    if(res.status == 500){
+                        this.$message.error(res.msg)
+                    }else{
+                        this.$router.push('/Chat')
+                    }
                 }).catch(err=>{
                     this.$message(err)
                 })
@@ -67,7 +78,6 @@ export default {
                     type:'warning'
                 })
             }
-            
         },
         toRegiste(){
             this.$router.push('/register')

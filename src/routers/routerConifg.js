@@ -12,23 +12,24 @@ const routes = [
                 children:[
                     {
                         path:':userID',
-                        component:()=>import('../views/chatRoom.vue'),
+                        component:()=>import('../components/chatRoom.vue'),
                     }
+                    
                 ]
             },
             {
-                path:'Contacts',
+                path:'/Contacts',
                 name:'Contacts',
                 component:()=>import('../views/Contacts.vue'),
                 children:[
                     {
                         path:':userID',
-                        component:()=>import('../views/userCard.vue'),
-                    }
+                        component:()=>import('../components/userCard.vue'),
+                    },
                 ]
             },
             {
-                path:'WechatMoments',
+                path:'/WechatMoments',
                 name:'WechatMoments',
                 component:()=>import('../views/WechatMoments.vue'),
             },

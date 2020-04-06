@@ -9,12 +9,9 @@ export const loginReuqest = (acount,userPassword)=>{
         }
     })
 }
-export const authorizationRequest = (token)=>{
+export const authorizationRequest = ()=>{
     return axios.request({
-        url:'/authorization',
+        url:'/getUser',
         method:'post',
-        data:{
-            token
-        }
     })
 }

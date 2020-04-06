@@ -11,8 +11,9 @@ class HttpRequest{
             },
             transformRequest : [function (data) {
                 let ret = ''
-                console.log(data)
                 for (let it in data) {
+                    // console.log(it+"  "+data[it])
+                    // console.log(encodeURIComponent(it)+"  "+encodeURIComponent(data[it]))
                     ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
                 }
                 return ret
@@ -30,27 +31,16 @@ class HttpRequest{
     }
     
     interceptors(instance){
-        // instance.interceptors.request.use(
-        //     config => {
-        //       // POST传参序列化
-        //       console.log(config)
-        //       if (config.method === "post") {
-        //         config.data = JSON.stringify(config.data);
-        //         console.log(config.data)
-        //       }
-        //       return config;
-        //     },
-        //     error => {
-        //       return Promise.reject(error);
-        //     }
-        //   );
+
         //可以在请求相应的时候进行验证头的携带，具体看demo
         instance.interceptors.response.use(res=>{
-            const data = res.data
-            data.status = res.status
+            let data = res.data.extend
+            data.status = res.data.code
+            data.msg = res.data.mag
             return data
         },err=>{
-            return Promise.reject(err.message)
+            console.log(err)
+            return Promise.reject(err)
         })
     }
 }

@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "9546475",
+      "name": "添加好友_1",
+      "font_class": "tianjiahaoyou_",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "13625333",
+      "name": "添加好友",
+      "font_class": "tianjiahaoyou",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
       "icon_id": "1435425",
       "name": "开心 笑脸 表情",
       "font_class": "tubiaozhizuomoban",

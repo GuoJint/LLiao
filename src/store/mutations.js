@@ -1,6 +1,9 @@
 const mutations = {
-    SET_USERID(state,userID){
-        state.userID = userID
+    SET_NEWFMSG(state,newFriendsMSG){
+        state.newFriendsMSG = newFriendsMSG
+    },
+    CLEAR_NEWFMSG(state){
+        state.newFriendsMSG = 0
     }
 }
 export default mutations

@@ -1,4 +1,7 @@
 const state={
-    userID:''
+    contactsTotalMSG:'',
+    newFriendsMSG:'',
+    chatTotalMSG:'',
+    
 }
 export default state

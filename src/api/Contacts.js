@@ -1,24 +1,52 @@
 import axios from './index'
 
-export const ContactsListRequest = (userID)=>{
+//用户列表
+export const ContactsListRequest = ()=>{
     return axios.request({
-        url:'/Contacts/ContactsListRequest',
+        url:'/friends',
         method:'post',
-        data:{
-            userID
+    })
+}
+//添加好友的请求
+export const searchUserRequest = (name,queryString) => {
+    return axios.request({
+        url:`/friends/${name}`,
+        method:'get',
+        params:{
+            queryString
         }
     })
 }
-export const ContactsListRequestElse = (userID)=>{
+//添加确认的请求
+export const searchUserConfirm = (id,nick,message) => {
     return axios.request({
-        url:'/Contacts/ContactsListRequestElse',
+        url:`/friends/${id}`,
         method:'post',
         data:{
-            userID
+            nick,
+            message
         }
     })
 }
-export const searchRequest = (queryString) => {
+//新的朋友列表请求
+export const newFriendsRequest = () => {
+    return axios.request({
+        url:'/friends/req',
+        method:'get',
+    })
+}
+//新的朋友是否接受请求
+export const ifAcceptRequest = (id,status) => {
+    return axios.request({
+        url:`/friends/add/${id}`,
+        method:'post',
+        data:{
+            status
+        }
+    })
+}
+//查询好友请求
+export const searchListRequest = (queryString) => {
     return axios.request({
         url:'/Contacts/search',
         method:'post',
@@ -27,6 +55,7 @@ export const searchRequest = (queryString) => {
         }
     })
 }
+//初始查询
 export const loadRequest = () => {
     return axios.request({
         url:'/Contacts/loadRequest',

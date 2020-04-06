@@ -14,14 +14,20 @@ export default {
     data() { 
         return {
             nowRouter:'',
-            Chat:'active',
+            Chat:'',
             Contacts:'',
             WechatMoments:'',
         }
     },
     mounted(){
+        this.getNowRouter()
     },
     methods:{
+        getNowRouter(){
+            // console.log(this.$route.name)
+            this.nowRouter = this.$route.name
+            this.changeColor()
+        },
         changeColor(){
             if(this.nowRouter == "Chat"){
                 this.Chat = 'active'

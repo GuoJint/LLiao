@@ -3,10 +3,10 @@
             <el-card>
                 <div class="CHeader">
                     <div class="CHLeft">
-                        <span>{{nowItem.name}}</span>
+                        <span>{{nowItem.nick}}</span>
                         <p>{{nowItem.Sentence}}</p>
                     </div>
-                    <img src="../assets/img1.jpg" alt="">
+                    <img :src="nowItem.headUrl" alt="">
                 </div>
                 <div class="CMain">
                     <div>

@@ -155,22 +155,27 @@ export default {
             let that = this.ruleForm
             this.$refs[formName].validate((valid)=>{
                 if(valid){
-                    console.log(this)
-                    console.log(that)
-                    console.log(that.account)
                     registerRequest(
                         that.account,
                         that.userPassword,
                         that.phone,
                         that.verificationCode
                     ).then((res)=>{
-                        this.$message({
-                            message:res.data.message,
-                            type:'success'
-                        })
+                        if(status == 200){
+                            this.$message({
+                                message:res.msg,
+                                type:'success'
+                            })
+                        }else{
+                            this.$message({
+                                message:res.msg,
+                                type:'error'
+                            })
+                        }
                         this.$router.push('/login')
                     }).catch((err)=>{
-                        this.$message.error(err.data.message)
+                        console.log(err)
+                        this.$message.error(err)
                     })
                 }
             })
