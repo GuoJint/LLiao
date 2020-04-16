@@ -31,7 +31,7 @@ export const searchUserConfirm = (id,nick,message) => {
 //新的朋友列表请求
 export const newFriendsRequest = () => {
     return axios.request({
-        url:'/friends/req',
+        url:'/friends/reqed',
         method:'get',
     })
 }
@@ -60,5 +60,15 @@ export const loadRequest = () => {
     return axios.request({
         url:'/Contacts/loadRequest',
         method:'get',
+    })
+}
+//发起聊天请求
+export const addChat = (toid) => {
+    return axios.request({
+        url:'/chat/add/list',
+        method:'post',
+        data:{
+            toid
+        }
     })
 }

@@ -23,13 +23,14 @@
                     </div>
                 </div>
                 <div class="CFooter">
-                    <el-button type="success">发送消息</el-button>
+                    <el-button type="success" @click="sendMsg(nowItem.id)">发送消息</el-button>
                 </div>
             </el-card>
     </div>
 </template>
 
 <script>
+import {addChat} from '../api/Contacts'
 export default {
     name: 'userCard',
     props:{
@@ -38,6 +39,15 @@ export default {
     data() { 
         return {
 
+        }
+    },
+    methods:{
+        //点击发送消息
+        sendMsg(id){
+            addChat(id).then((res)=>{
+                console.log(res)
+                this.$router.push(`/chat/${res.id}`)
+            })
         }
     }
 }

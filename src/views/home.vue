@@ -14,15 +14,40 @@
 
 <script>
 import NavLeftA from '../components/NavLeftA'
+// import {newFriendsRequest} from '../api/Contacts'
+import { mapMutations} from 'vuex'
 export default {
     name: 'home',
     data() { 
         return {
-
+            loadLoop:''
         }
+    },
+    mounted(){
+        // this.loadNewFriends()
     },
     components:{
         NavLeftA
+    },
+    methods:{
+        ...mapMutations([
+            "SET_FRIENDREQ",
+            "SET_NEWFMSG"
+        ]),
+        //加载新的朋友数据
+        // loadNewFriends(){
+        //     this.loadLoop =  setInterval(() => {
+        //         newFriendsRequest().then((res)=>{
+        //             // console.log(res)
+        //             let friendReq = res.friendReq
+        //             this.SET_FRIENDREQ(friendReq)
+        //             this.SET_NEWFMSG(friendReq.length)
+        //         })
+        //     }, 3000);
+        // },
+    },
+    destroyed(){
+        clearInterval(this.loadLoop)
     }
 }
 </script>

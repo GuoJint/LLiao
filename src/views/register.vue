@@ -43,8 +43,9 @@ export default {
     data() { 
         var checkAcount = (rule,value,callback)=>{
             let acountReg = /[`~!@#$%^&*()_\-+=<>?:"{}|/, .;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘'，。、]/
-            if(acountReg.test(value)){
-                callback(new Error('不能包含特殊字符'))
+            let chineseReg = /[\u4E00-\u9FA5]/g
+            if(acountReg.test(value)||chineseReg.test(value)){
+                callback(new Error('不能包含特殊字符或汉字'))
             }else{
                 callback()
             }
@@ -111,8 +112,9 @@ export default {
                 sendCodeRequest(
                         parseInt(this.ruleForm.phone)
                 ).then((res)=>{
+                    console.log(res)
                     this.$message({
-                        message:res.data.message,
+                        message:res.msg,
                         type:'success'
                     })
                     this.time = 60
@@ -125,7 +127,7 @@ export default {
                             return
                         }
                         this.time -= 1
-                    },100)
+                    },1000)
                 }).catch((error)=>{
                     console.log(error)
                 })
@@ -161,7 +163,7 @@ export default {
                         that.phone,
                         that.verificationCode
                     ).then((res)=>{
-                        if(status == 200){
+                        if(res.status == 200){
                             this.$message({
                                 message:res.msg,
                                 type:'success'

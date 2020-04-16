@@ -18,20 +18,20 @@
             class="asideCard" 
             ref=indexList  
             v-for="(item,index) in chatList" :key="index" 
-            @click="changePeople(item.userID,index,item)
+            @click="changePeople(item.toUserid,index,item)
             ">
                 <div class="CardContainer">
                     <div class="CardL">
-                        <img :src="item.img" alt="头像">
+                        <img :src="item.user.headUrl" alt="头像">
                     </div>
                     <div class="CardM">
                         <div>
-                            <h4>{{item.name}}</h4>
-                            <p>{{item.lastChat}}</p>
+                            <h4>{{item.user.nick}}</h4>
+                            <p>{{lastmessage}}</p>
                         </div>
                     </div>
                     <div class="CardR">
-                        <p>{{item.time}}</p>
+                        <p>{{lastTime[index]}}</p>
                     </div>
                 </div>
             </div>
@@ -45,7 +45,7 @@
 <script>
 //删除添加节点的方式，onmessage收到的res如果为数组，0，1,2分别处理不同事物，比如0里面的数据用来接收当前用户消息，1里面的数据用来接收未读消息
 //当index为1时对获取未读消息的fromID把对应id节点删除掉，再重新添加置顶一个节点
-import {searchRequest , loadRequest , chatListRequest} from '../api/chat'
+import {searchRequest  , chatListRequest} from '../api/chat'
 import { mapState} from 'vuex'
 export default {
     name: 'Chat',
@@ -56,11 +56,15 @@ export default {
             chatList:[],
             selection:'',
             nowItem:'',
-            ws:''
+            ws:'',
+            //最后一次系列
+            lastmessage:'',
+            lastTime:[]
         }
     },
+
     mounted(){
-        this.loadResults()
+        // this.loadResults()
         this.getChatList()
         this.webscoket()
     },
@@ -73,15 +77,40 @@ export default {
         //获取联系人列表
         getChatList(){
                 chatListRequest(this.userID).then((res)=>{
-                    this.chatList = res.data
+                    
+                    this.chatList = res.chatLists
+                    res.chatLists.forEach((item)=>{
+                        // console.log(item.createtime)
+                        this.lastTime.push(item.createtime)
+                    })
+                    this.lastTime = this.lastTime.map((item)=>{
+                        console.log(item)
+                        let arr = item.split("-")
+                        const date = new Date()
+                        let nowMonth = date.getMonth()
+                        if(parseInt(arr[1])==(nowMonth+1)){
+                            let nowday = date.getDate()
+                            if((nowday-parseInt(arr[2]))>=1){
+                                let splittime = item.split(" ")
+                                splittime = splittime[0].split("-")
+                                let showtime = splittime[1]+"-"+splittime[2]
+                                return showtime
+                            }else{
+                                let showtime2 = item.split(" ")
+                                return showtime2[1]
+                                // console.log(showtime2)
+                            }
+                        }
+                    })
+                    console.log(this.lastTime)
                 })
         },
         //获取搜索框预搜索列表
-        loadResults() {
-            loadRequest().then((res)=>{
-                this.searchResults = res.data
-            })
-        },
+        // loadResults() {
+        //     loadRequest().then((res)=>{
+        //         this.searchResults = res.data
+        //     })
+        // },
         //将搜索值传给后端，后端返回数据，通过.then中的callback反馈到界面
         querySearchAsync(queryString, cb) {
             var searchResults = this.searchResults;
@@ -122,14 +151,23 @@ export default {
             }
         },
         webscoket(){
-            console.log(window)
-            console.log("webscoket" in window)
-            var ws = new WebSocket("ws://localhost:8080/")
+            var ws = new WebSocket("ws://www.zzxblog.top:8081/LLiao/socket/websocket")
             this.ws = ws
             ws.onmessage = function(event){
                 console.log(event)
             }
-            // console.log(ws)
+            this.ws.onopen = function(ws){
+                // console.log(ws)
+                ws.target.send("sdsdsdsds")
+                ws.target.onmessage = function(event){
+                    console.log(event)
+                }
+                // console.log(ws)
+            }
+            ws.onmessage = function(event){
+                console.log(event)
+            }
+            // console.log(this.ws)
         }
     }
 }

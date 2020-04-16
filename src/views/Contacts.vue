@@ -22,7 +22,9 @@
                     
                     <div class="CardContainer">
                         <div class="CardL">
-                            <i class="iconfont">&#xe618;</i>
+                            <el-badge :value="newFriendsMSG" :max="99" type="success" :hidden="contactsFlagT">
+                                <i class="iconfont">&#xe618;</i>
+                            </el-badge>
                         </div>
                         <div class="CardM">
                             <div>
@@ -101,8 +103,14 @@
                                 </div>
                             </div>
                             <div class="NFVRight">
-                                <el-button size="small" type="success" @click="ifAccept(2,item.id)">接受</el-button>
-                                <el-button size="small" type="success" @click="ifAccept(1,item.id)">拒绝</el-button>
+                                <div v-if="item.status==0?true:false">
+                                    <el-button size="small" type="success" @click="ifAccept(2,item.fromUserid)">接受</el-button>
+                                    <el-button size="small" type="success" @click="ifAccept(1,item.fromUserid)">拒绝</el-button>
+                                </div>
+                                <div v-else>
+                                    <p>{{item.status==2?"已接受":"已拒绝"}}</p>
+                                    <el-button size="small" type="success" plain @click="ifAccept(1,item.fromUserid)">删除</el-button>
+                                </div>
                                 <p>{{item.createtime}}</p>
                             </div>
                         </div>
@@ -120,8 +128,8 @@
 </template>
 
 <script>
-import {searchListRequest , searchUserRequest , ContactsListRequest , searchUserConfirm ,newFriendsRequest ,ifAcceptRequest} from '../api/Contacts'
-// import { mapState } from 'vuex'
+import {searchListRequest , searchUserRequest , ContactsListRequest , searchUserConfirm  ,ifAcceptRequest } from '../api/Contacts'
+import { mapState } from 'vuex'
 export default {
     name: 'Contacts',
     data() { 
@@ -132,6 +140,7 @@ export default {
             ContactsListElse:[],
             selection:'',
             nowItem:'',
+            contactsListLoop:'',
             //添加好友系列数据
             dialogVisible: false,
             searchContent:'',
@@ -140,16 +149,25 @@ export default {
             addmessage:'',
             //新的朋友系列数据
             newFriendVsb:false,
-            friendReq:'',
-            newFriendFlag: false
+            newFriendFlag: false,
         }
     },
     mounted(){
         // this.loadResults()
         this.getContactsList()
-        this.loadNewFriends()
     },
     computed:{
+        ...mapState([
+            'newFriendsMSG',
+            'friendReq'
+        ]),
+        contactsFlagT:function(){
+            if(this.newFriendsMSG <=0){
+                return true
+            }else{
+                return false
+            }
+        }
     },
     methods:{
         //获取联系人列表
@@ -159,7 +177,7 @@ export default {
                 this.ContactsList = res.friends
             })
         },
-        //获取搜索框预搜索列表
+        //获取搜索框预搜索列biao
         // loadResults() {
         //     loadRequest().then((res)=>{
         //         this.searchResults = res.data
@@ -218,7 +236,7 @@ export default {
                     this.addUserInfo = res.user
                     this.addUserInfoSure = true
                 }else{
-                    this.$message.error("查询不到此人")
+                    this.$message.error(res.mag)
                 }
             })
         },
@@ -230,26 +248,20 @@ export default {
             searchUserConfirm(id,nick,message).then((res)=>{
                 if(res.status == 200){
                     this.$message.success(res.msg)
+                    this.addUserInfoSure = false
                 }else{
                     this.$message.error(res.msg)
                 }
                 
             })
         },
-        //加载新的朋友数据
-        loadNewFriends(){
-            setInterval(() => {
-                newFriendsRequest().then((res)=>{
-                    console.log(res)
-                    this.friendReq = res.friendReq
-                })
-            }, 1500);
-        },
         //点击新的朋友
         addNewFriends(){
-            this.$refs.indexList.forEach( item =>{
-                item.style.backgroundColor = ""
-            })
+            if(this.$refs.indexList !== undefined){
+                this.$refs.indexList.forEach( item =>{
+                    item.style.backgroundColor = ""
+                })
+            }
             this.$refs.newFriend.style.backgroundColor = "#C9C6C6"
             this.newFriendVsb = true
             if(this.friendReq.length > 0){
@@ -260,11 +272,22 @@ export default {
         },
         //接受或拒绝
         ifAccept(status,id){
+            console.log(id,status)
             ifAcceptRequest(id,status).then((res)=>{
                 console.log(res)
+                if(res.status == 500){
+                    this.$message.error(res.msg)
+                }else{
+                    this.$message.success(res.msg)
+                }
             })
-        }
+        },
+
+    },
+    destroyed(){
+        clearInterval(this.contactsListLoop)
     }
+    
 }
 </script> 
 <style lang="scss">
@@ -346,6 +369,7 @@ export default {
                         justify-content: center;
                         align-items: center;
                         margin: 0 auto;
+                        margin-top: 5px;
                         width: 80%;
                         border-bottom: 1px solid #E7E7E7;
                         .NFVLeft,.NFVRight{
@@ -371,6 +395,12 @@ export default {
                             flex: 1;
                             align-items: flex-end;
                             flex-direction: column;
+                            div{
+                                p{
+                                    display: inline-block;
+                                    margin-right: 15px;
+                                }
+                            }
                             p{
                                 color: #A6A6A6;
                                 margin-top: 5px;

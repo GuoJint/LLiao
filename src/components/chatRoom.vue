@@ -2,7 +2,7 @@
     <div class="chatRoom" @click="test">
         <el-container>
             <el-header>
-                <p>{{nowItem.name}}</p>
+                <p>{{nowItem.user.nick}}</p>
 
             </el-header>
             <el-main>
@@ -18,54 +18,7 @@
                         <img src="../assets/img1.jpg" alt="">
                     </div>
                 </div>
-                <div class="Right">
-                    <div class="RContainer">
-                        <p>天天天郭晋廷</p>
-                        <img src="../assets/img1.jpg" alt="">
-                    </div>
-                </div>
-                <div class="Left">
-                    <div class="LContainer">
-                        <img src="../assets/img1.jpg" alt="">
-                        <p>天天天郭晋廷</p>
-                    </div>
-                </div>
-                <div class="Right">
-                    <div class="RContainer">
-                        <p>天天天郭晋廷</p>
-                        <img src="../assets/img1.jpg" alt="">
-                    </div>
-                </div>
-                <div class="Left">
-                    <div class="LContainer">
-                        <img src="../assets/img1.jpg" alt="">
-                        <p>天天天郭晋廷</p>
-                    </div>
-                </div>
-                <div class="Right">
-                    <div class="RContainer">
-                        <p>天天天郭晋廷</p>
-                        <img src="../assets/img1.jpg" alt="">
-                    </div>
-                </div>
-                <div class="Left">
-                    <div class="LContainer">
-                        <img src="../assets/img1.jpg" alt="">
-                        <p>天天天郭晋廷</p>
-                    </div>
-                </div>
-                <div class="Right">
-                    <div class="RContainer">
-                        <p>天天天郭晋廷</p>
-                        <img src="../assets/img1.jpg" alt="">
-                    </div>
-                </div>
-                <div class="Left">
-                    <div class="LContainer">
-                        <img src="../assets/img1.jpg" alt="">
-                        <p>天天天郭晋廷</p>
-                    </div>
-                </div>
+                
             </el-main>
             <el-footer>
                 <div class="tools">
