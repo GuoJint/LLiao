@@ -6,16 +6,16 @@
 
             </el-header>
             <el-main>
-                <div class="Left">
+                <div class="Left" v-for="(item,index) in fromMessage" :key="index">
                     <div class="LContainer">
-                        <img src="../assets/img1.jpg" alt="">
-                        <p>天天天郭晋廷</p>
+                        <img :src="nowItem.user.headUrl" alt="">
+                        <p>{{item}}</p>
                     </div>
                 </div>
-                <div class="Right">
+                <div class="Right" v-for="(item,index) in tomessage" :key="'Right-'+index">
                     <div class="RContainer">
-                        <p>少时诵诗书</p>
-                        <img src="../assets/img1.jpg" alt="">
+                        <p>{{item}}</p>
+                        <img :src="myHeadImg" alt="">
                     </div>
                 </div>
                 
@@ -48,17 +48,27 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 export default {
     name: 'chatRoom',
     props:{
         nowItem:Object,
-        ws:Object
+        
     },
     data() { 
         return {
             userID:'',
-            textarea:''
+            textarea:'',
+            fromMessage:["sss","aaa"],
+            tomessage:["wowo"]
+
         }
+    },
+    computed:{
+        ...mapState({
+            WS:"WS",
+            myHeadImg:"myHeadImg"
+        })
     },
     mounted(){
         this.submit()
@@ -67,27 +77,41 @@ export default {
         test(){
             console.log(this.$route.params.userID)
         },
+        //在mounted阶段调用一次，在路由更新时调用一次
+        initMessage(){
+            //调用接口初始化更新fromtoMssage
+        },
         submit(){
             document.getElementById('sendmsgBykey').addEventListener('keydown',(event)=>{
                 if(event.ctrlKey &&event.keyCode ==13){
-                    console.log(this.ws)
-                    this.ws.onopen = function(){
-                        this.ws.send(this.textarea)
-                    }
+                    console.log(this.WS)
+                    this.WS.send(`{chatListId: ${this.nowItem.id}, message: "${this.textarea}", state: 0, toUserId: ${this.nowItem.toUserid}, userId: ${this.nowItem.fromUserid}}`)
+                    this.tomessage.push(this.textarea)
+                    this.textarea = ""
                 }
             })
         },
         sendByClick(){
-            this.ws.onopen = function(){
-                this.ws.send(this.textarea)
-            }
+            this.WS.send(this.textarea)
+            this.tomessage.push(this.textarea)
+            this.textarea = ""
         }
     },
     watch:{
-        $route:function(val){
-            this.userID = val.params.userID
+        $route:function(to){
+            this.fromMessage = []
+            this.tomessage = []
+            this.userID = to.params.userID
         }
-    }
+    },
+    beforeRouteUpdate (next) {
+    // 在当前路由改变，但是该组件被复用时调用
+    // 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候，
+    // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
+    // 可以访问组件实例 `this`
+        this.initMessage()
+        next()
+    },
 }
 </script>
 <style lang="scss">

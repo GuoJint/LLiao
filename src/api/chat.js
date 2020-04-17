@@ -21,3 +21,9 @@ export const chatListRequest = () => {
         method:'get',
     })
 }
+export const getToken = ()=>{
+    return axios.request({
+        url:'/getToken',
+        method:'post',
+    })
+}

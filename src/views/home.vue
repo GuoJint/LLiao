@@ -14,8 +14,8 @@
 
 <script>
 import NavLeftA from '../components/NavLeftA'
-// import {newFriendsRequest} from '../api/Contacts'
-import { mapMutations} from 'vuex'
+import {getToken} from '../api/chat'
+import { mapMutations ,mapState} from 'vuex'
 export default {
     name: 'home',
     data() { 
@@ -25,6 +25,12 @@ export default {
     },
     mounted(){
         // this.loadNewFriends()
+        this.getWSToken()
+    },
+    computed:{
+        ...mapState({
+            WS:"WS"
+        })
     },
     components:{
         NavLeftA
@@ -32,7 +38,9 @@ export default {
     methods:{
         ...mapMutations([
             "SET_FRIENDREQ",
-            "SET_NEWFMSG"
+            "SET_NEWFMSG",
+            "SET_WS",
+            "SET_MSGTRANSFER"
         ]),
         //加载新的朋友数据
         // loadNewFriends(){
@@ -45,9 +53,33 @@ export default {
         //         })
         //     }, 3000);
         // },
+        getWSToken(){
+            getToken().then((res)=>{
+                this.webscoket(res.token)
+            })
+        },
+        webscoket(token){
+            var ws = new WebSocket("ws://www.zzxblog.top:8081/LLiao/socket/websocket/"+token)
+            this.SET_WS(ws)
+            this.WS.onopen = function(ws){
+                console.log(ws)
+                ws.target.send("sdsdsdsds")
+            }
+            //接受消息[{state(判断是否已读),unread(未读数),nick,id,message:[{nu:1(1,2来区分1是对方发的,2是我发的),stence:"sss"}]},{},{}]
+            this.WS.onmessage = function (evt) 
+            {   
+                let data = JSON.parse(evt.data)
+                this.SET_MSGTRANSFER(data)
+            };
+        }
     },
     destroyed(){
         clearInterval(this.loadLoop)
+        this.ws.onclose = function()
+            { 
+                  // 关闭 websocket
+                alert("连接已关闭..."); 
+            };
     }
 }
 </script>

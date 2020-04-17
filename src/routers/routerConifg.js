@@ -3,7 +3,7 @@ const routes = [
         path:'/',
         name:'home',
         component:()=>import('../views/home.vue'),
-        redirect:'/login',
+        redirect:'/Chat',
         children:[
             {
                 path:'/Chat',
@@ -32,6 +32,18 @@ const routes = [
                 path:'/WechatMoments',
                 name:'WechatMoments',
                 component:()=>import('../views/WechatMoments.vue'),
+                children:[
+                    {
+                        path:'MomentsShow',
+                        name:'MomentsShow',
+                        component:()=>import('../components/MomentsShow.vue'),
+                    },
+                    {
+                        path:'MomentsMange',
+                        name:'MomentsMange',
+                        component:()=>import('../components/MomentsMange.vue'),
+                    },
+                ]
             },
         ]
     },

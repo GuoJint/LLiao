@@ -37,7 +37,7 @@
             </div>
         </div>
         <div class="chatMain">
-            <router-view :nowItem="nowItem" :ws="ws"></router-view>
+            <router-view :nowItem="nowItem" ></router-view>
         </div>
     </div>
 </template>
@@ -45,8 +45,8 @@
 <script>
 //删除添加节点的方式，onmessage收到的res如果为数组，0，1,2分别处理不同事物，比如0里面的数据用来接收当前用户消息，1里面的数据用来接收未读消息
 //当index为1时对获取未读消息的fromID把对应id节点删除掉，再重新添加置顶一个节点
-import {searchRequest  , chatListRequest} from '../api/chat'
-import { mapState} from 'vuex'
+import {searchRequest  , chatListRequest } from '../api/chat'
+import { mapState } from 'vuex'
 export default {
     name: 'Chat',
     data() { 
@@ -56,55 +56,85 @@ export default {
             chatList:[],
             selection:'',
             nowItem:'',
-            ws:'',
+            token:'',
             //最后一次系列
             lastmessage:'',
             lastTime:[]
         }
     },
-
+    computed:{
+        ...mapState({
+            msgTransfer:'msgTransfer'
+        })
+    },
+    watch:{
+        msgTransfer:function(){
+            if(this.$route.params.userID == undefined){
+                //将消息加入到未读中
+                console.log("sss")
+            }else if(this.$route.params.userID == this.msgTransfer.toUserId){
+                //如果相等吧消息添加到对话框中
+                console.log("相等")
+            }else{
+                //加入未读中
+                console.log("不相等")
+            }
+        }
+    },
     mounted(){
         // this.loadResults()
         this.getChatList()
-        this.webscoket()
-    },
-    computed:{
-        ...mapState([
-            'userID'
-        ])
+        this.judgeIfAtRoom()
     },
     methods:{
+        //判断当前是否处于chatRoom
+        judgeIfAtRoom(){
+            console.log(this.$route.params.userID == undefined)
+            if(this.$route.path == "/Chat"){
+                console.log("sss")
+            }
+        },
         //获取联系人列表
         getChatList(){
-                chatListRequest(this.userID).then((res)=>{
-                    
-                    this.chatList = res.chatLists
-                    res.chatLists.forEach((item)=>{
-                        // console.log(item.createtime)
-                        this.lastTime.push(item.createtime)
-                    })
-                    this.lastTime = this.lastTime.map((item)=>{
-                        console.log(item)
-                        let arr = item.split("-")
-                        const date = new Date()
-                        let nowMonth = date.getMonth()
-                        if(parseInt(arr[1])==(nowMonth+1)){
-                            let nowday = date.getDate()
-                            if((nowday-parseInt(arr[2]))>=1){
-                                let splittime = item.split(" ")
-                                splittime = splittime[0].split("-")
-                                let showtime = splittime[1]+"-"+splittime[2]
-                                return showtime
-                            }else{
-                                let showtime2 = item.split(" ")
-                                return showtime2[1]
-                                // console.log(showtime2)
+                chatListRequest().then((res)=>{
+                    if(res.status == 500){
+                        this.$message.error(res.msg)
+                    }else{
+                        this.chatList = res.chatLists
+                        // setInterval(() => {
+                        //     this.chatList.push({"id":10,"fromUserid":2,"toUserid":1,"createtime":"2020-04-14 20:50:56","message":null,"unread":0,"user":{"id":1,"acount":"a1227ee","headUrl":"http://images.nowcoder.com/head/132t.png","nick":"张大爷","autograph":null,"region":null,"comments":null}})
+                        // }, 2000);
+                        res.chatLists.forEach((item)=>{
+                            // console.log(item.createtime)
+                            this.lastTime.push(item.createtime)
+                        })
+                        this.lastTime = this.lastTime.map((item)=>{
+                            // console.log(item)
+                            let arr = item.split("-")
+                            const date = new Date()
+                            let nowMonth = date.getMonth()
+                            if(parseInt(arr[1])==(nowMonth+1)){
+                                let nowday = date.getDate()
+                                if((nowday-parseInt(arr[2]))>=1){
+                                    let splittime = item.split(" ")
+                                    splittime = splittime[0].split("-")
+                                    let showtime = splittime[1]+"-"+splittime[2]
+                                    return showtime
+                                }else{
+                                    let showtime2 = item.split(" ")
+                                    return showtime2[1]
+                                    // console.log(showtime2)
+                                }
                             }
-                        }
-                    })
-                    console.log(this.lastTime)
+                        })
+                    }
+                    
+                    // console.log(this.lastTime)
+                }).catch((err)=>{
+                    this.$message.error(err)
                 })
         },
+        
         //获取搜索框预搜索列表
         // loadResults() {
         //     loadRequest().then((res)=>{
@@ -142,6 +172,7 @@ export default {
             //当点击同一次路由后不执行  此时通过route获取的userid为点击之前的所以当没有重复点击时userid也不同
             if(userID != this.$route.params.userID){
                 //indexList为ref数组
+                console.log(item)
                 this.nowItem = item
                 this.$refs.indexList.forEach(item => {
                     item.style.backgroundColor = ""
@@ -150,26 +181,8 @@ export default {
                 this.$router.push(`/Chat/${userID}`)
             }
         },
-        webscoket(){
-            var ws = new WebSocket("ws://www.zzxblog.top:8081/LLiao/socket/websocket")
-            this.ws = ws
-            ws.onmessage = function(event){
-                console.log(event)
-            }
-            this.ws.onopen = function(ws){
-                // console.log(ws)
-                ws.target.send("sdsdsdsds")
-                ws.target.onmessage = function(event){
-                    console.log(event)
-                }
-                // console.log(ws)
-            }
-            ws.onmessage = function(event){
-                console.log(event)
-            }
-            // console.log(this.ws)
-        }
-    }
+        
+    },
 }
 </script>
 <style lang="scss">

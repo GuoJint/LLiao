@@ -1,6 +1,6 @@
 <template>
     <div class="NavLeftA">
-        <img class="HeadPortrait" src="../assets/img1.jpg" alt="头像" @click="userInfoVSB = true">
+        <img class="HeadPortrait" :src="myHeadImg" alt="头像" @click="userInfoVSB = true">
         <i class="iconfont" :class="Chat" @click="toChat">&#xe624;</i>
         <el-badge :value="newFriendsMSG" :max="99" type="success" :hidden="contactsFlag">
             <i class="iconfont" :class="Contacts" @click="toContacts">&#xe605;</i>
@@ -72,7 +72,8 @@ export default {
     },
     computed:{
         ...mapState([
-            "newFriendsMSG"
+            "newFriendsMSG",
+            "myHeadImg"
         ]),
         contactsFlag:function(){
             if(this.newFriendsMSG <=0){
@@ -121,7 +122,7 @@ export default {
             if(this.nowRouter !== 'WechatMoments'){
                 this.nowRouter = 'WechatMoments'
                 this.changeColor()
-                this.$router.push('/WechatMoments')
+                this.$router.push('/WechatMoments/MomentsShow')
             }
         },
         //设置用户信息

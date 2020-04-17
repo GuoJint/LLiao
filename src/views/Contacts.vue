@@ -174,7 +174,13 @@ export default {
         getContactsList(){
             ContactsListRequest().then((res)=>{
                 // console.log(res)
-                this.ContactsList = res.friends
+                if(res.status == 500){
+                    this.$message.error(res.msg)
+                }else{
+                    this.ContactsList = res.friends
+                }
+            }).catch((err)=>{
+                this.$message.error(err)
             })
         },
         //获取搜索框预搜索列biao

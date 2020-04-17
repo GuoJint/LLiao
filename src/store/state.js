@@ -2,6 +2,13 @@ const state={
     contactsTotalMSG:'',
     newFriendsMSG:'',
     chatTotalMSG:'',
-    friendReq:''
+    friendReq:'',
+    myHeadImg:'',
+    myNick:'',
+
+    //websockt
+    WS:'',
+    msgTransfer:''
+
 }
 export default state

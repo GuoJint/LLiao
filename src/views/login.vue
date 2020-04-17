@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import {loginReuqest } from '../api/login.js'
+import {loginReuqest , authorizationRequest} from '../api/login.js'
 import { mapMutations} from 'vuex'
 export default {
     name: 'login',
@@ -42,7 +42,7 @@ export default {
     },
     methods:{
         ...mapMutations([
-            'SET_USERID'
+            'SET_MYHEADIMG'
         ]),
         // ifPassDate(){
         //     authorizationRequest().then(res =>{
@@ -67,7 +67,10 @@ export default {
                     if(res.status == 500){
                         this.$message.error(res.msg)
                     }else{
-                        this.$router.push('/Chat')
+                        authorizationRequest().then((res)=>{
+                            this.SET_MYHEADIMG(res.user.headUrl)
+                            this.$router.push('/Chat')
+                        })
                     }
                 }).catch(err=>{
                     this.$message(err)
