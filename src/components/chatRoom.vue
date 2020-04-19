@@ -5,16 +5,16 @@
                 <p>{{nowItem.user.nick}}</p>
 
             </el-header>
-            <el-main>
-                <div class="Left" v-for="(item,index) in fromMessage" :key="index">
+            <el-main id="chat">
+                <div class="Left">
                     <div class="LContainer">
                         <img :src="nowItem.user.headUrl" alt="">
-                        <p>{{item}}</p>
+                        <p>ss</p>
                     </div>
                 </div>
-                <div class="Right" v-for="(item,index) in tomessage" :key="'Right-'+index">
+                <div class="Right">
                     <div class="RContainer">
-                        <p>{{item}}</p>
+                        <p>gg</p>
                         <img :src="myHeadImg" alt="">
                     </div>
                 </div>
@@ -53,15 +53,13 @@ export default {
     name: 'chatRoom',
     props:{
         nowItem:Object,
-        
+        message:String
     },
     data() { 
         return {
             userID:'',
             textarea:'',
-            fromMessage:["sss","aaa"],
-            tomessage:["wowo"]
-
+            
         }
     },
     computed:{
@@ -82,11 +80,25 @@ export default {
             //调用接口初始化更新fromtoMssage
         },
         submit(){
+            let that = this
             document.getElementById('sendmsgBykey').addEventListener('keydown',(event)=>{
                 if(event.ctrlKey &&event.keyCode ==13){
                     console.log(this.WS)
-                    this.WS.send(`{chatListId: ${this.nowItem.id}, message: "${this.textarea}", state: 0, toUserId: ${this.nowItem.toUserid}, userId: ${this.nowItem.fromUserid}}`)
-                    this.tomessage.push(this.textarea)
+                    this.WS.send(`{"chatListId":${this.nowItem.id},"message":"${this.textarea}","state":0,"toUserId":${this.nowItem.toUserid},"userId":${this.nowItem.fromUserid}}`)
+                    let chat = document.getElementById('chat')
+                    let Right = document.createElement('div')
+                    let RContainer = document.createElement('div')
+                    let p = document.createElement('p')
+                    let img = document.createElement('img')
+                    Right.className = "Right"
+                    RContainer.className = "RContainer"
+                    img.src = that.myHeadImg
+                    p.innerText = this.textarea
+                    RContainer.appendChild(p)
+                    RContainer.appendChild(img)
+                    Right.appendChild(RContainer)
+                    chat.appendChild(Right)
+                    
                     this.textarea = ""
                 }
             })
@@ -102,13 +114,29 @@ export default {
             this.fromMessage = []
             this.tomessage = []
             this.userID = to.params.userID
+        },
+        message:function(){
+            let chat = document.getElementById('chat')
+            let Left = document.createElement('div')
+            let LContainer = document.createElement('div')
+            let p = document.createElement('p')
+            let img = document.createElement('img')
+            Left.className = "Left"
+            LContainer.className = "LContainer"
+            img.src = this.nowItem.user.headUrl
+            p.innerText = this.message
+            LContainer.appendChild(img)
+            LContainer.appendChild(p)
+            Left.appendChild(LContainer)
+            chat.appendChild(Left)
         }
     },
-    beforeRouteUpdate (next) {
+    beforeRouteUpdate (to,from,next) {
     // 在当前路由改变，但是该组件被复用时调用
     // 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候，
     // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
     // 可以访问组件实例 `this`
+    console.log(to,from)
         this.initMessage()
         next()
     },

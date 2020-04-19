@@ -60,16 +60,15 @@ export default {
         },
         webscoket(token){
             var ws = new WebSocket("ws://www.zzxblog.top:8081/LLiao/socket/websocket/"+token)
+            const that = this
             this.SET_WS(ws)
-            this.WS.onopen = function(ws){
-                console.log(ws)
-                ws.target.send("sdsdsdsds")
-            }
+
             //接受消息[{state(判断是否已读),unread(未读数),nick,id,message:[{nu:1(1,2来区分1是对方发的,2是我发的),stence:"sss"}]},{},{}]
             this.WS.onmessage = function (evt) 
             {   
                 let data = JSON.parse(evt.data)
-                this.SET_MSGTRANSFER(data)
+                console.log(data)
+                that.SET_MSGTRANSFER(data)
             };
         }
     },

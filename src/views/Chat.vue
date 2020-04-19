@@ -37,7 +37,7 @@
             </div>
         </div>
         <div class="chatMain">
-            <router-view :nowItem="nowItem" ></router-view>
+            <router-view :nowItem="nowItem" :message="message"></router-view>
         </div>
     </div>
 </template>
@@ -57,6 +57,8 @@ export default {
             selection:'',
             nowItem:'',
             token:'',
+            //聊天消息
+            message:'',
             //最后一次系列
             lastmessage:'',
             lastTime:[]
@@ -69,12 +71,15 @@ export default {
     },
     watch:{
         msgTransfer:function(){
+            console.log(this.msgTransfer)
+            console.log("后端传过来的消息的ID："+this.msgTransfer.toUserId)
+            console.log("我所在的当前页面的ID："+this.$route.params.userID)
             if(this.$route.params.userID == undefined){
                 //将消息加入到未读中
-                console.log("sss")
+                console.log("未读消息")
             }else if(this.$route.params.userID == this.msgTransfer.toUserId){
                 //如果相等吧消息添加到对话框中
-                console.log("相等")
+                this.message = this.msgTransfer.message
             }else{
                 //加入未读中
                 console.log("不相等")
