@@ -1,21 +1,19 @@
 <template>
-    <div class="chatRoom" @click="test">
+    <div class="chatRoom" >
         <el-container>
             <el-header>
                 <p>{{nowItem.user.nick}}</p>
-
             </el-header>
             <el-main id="chat">
-                <div class="Left">
-                    <div class="LContainer">
-                        <img :src="nowItem.user.headUrl" alt="">
-                        <p>ss</p>
-                    </div>
+                <div class="loadMore">
+                    <i class="el-icon-loading" v-show="loading"></i>
+                    <p class="more" @click="loadMore" v-show="!loading">加载更多</p>
                 </div>
-                <div class="Right">
-                    <div class="RContainer">
-                        <p>gg</p>
-                        <img :src="myHeadImg" alt="">
+                <div :class="item.style1" v-for="(item,index) in messageAry" :key="index">
+                    <div :class="item.style2" >
+                        <img :src="nowItem.user.headUrl" v-if="item.style3" alt="">
+                        <p>{{item.message}}</p>
+                        <img :src="nowItem.user.headUrl" v-if="!item.style3" alt="">
                     </div>
                 </div>
                 
@@ -23,6 +21,13 @@
             <el-footer>
                 <div class="tools">
                     <div class="toolLeft">
+                        <!-- <el-popover
+                        placement="top-start"
+                        width="400"
+                        trigger="click">
+                        <img src="../assets/img1.jpg" style="width:100px;height:100px;" alt="">
+                        <el-button slot="reference"><i class="iconfont">&#xe613;</i></el-button>
+                        </el-popover> -->
                         <i class="iconfont">&#xe613;</i>
                         <i class="el-icon-folder-opened"></i>
                         <i class="el-icon-scissors"></i>
@@ -32,6 +37,7 @@
                         <i class="iconfont">&#xe659;</i>
                         <i class="iconfont">&#xe617;</i>
                     </div>
+                    
                 </div>
                 <el-input
                 id="sendmsgBykey"
@@ -48,96 +54,109 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import {mapState , mapMutations} from 'vuex'
+import { getMoreRequest } from '../api/chat'
 export default {
     name: 'chatRoom',
     props:{
         nowItem:Object,
-        message:String
     },
     data() { 
         return {
-            userID:'',
+            loading:false,
+            loadMorePage:0,
             textarea:'',
-            
+            //
+            messageAry:[{style1:"Left",style2:"LContainer",style3:true,message:"sss"},{style1:"Right",style2:"RContainer",style3:false,message:"dd"},{style1:"Left",style2:"LContainer",style3:true,message:"ss"}]
         }
     },
     computed:{
         ...mapState({
             WS:"WS",
-            myHeadImg:"myHeadImg"
+            myHeadImg:"myHeadImg",
+            chatMsg:"chatMsg"
         })
     },
     mounted(){
         this.submit()
     },
     methods:{
-        test(){
-            console.log(this.$route.params.userID)
+        ...mapMutations([
+            'CLEAR_CHATMSG'
+        ]),
+        //加载消息记录
+        loadMore(){
+            //调用接口往mssageAry中使用unshift添加数据
+            getMoreRequest(parseInt(this.nowItem.toUserid),this.loadMorePage).then((res)=>{
+                if(res.status == 200){
+                    this.loading = true
+                    setTimeout(() => {
+                        res.record.forEach(item => {
+                            if(this.nowItem.toUserid !== item.userId){
+                                this.messageAry.unshift({style1:"Right",style2:"RContainer",style3:false,message:`${item.message}`})
+                            }else{
+                                this.messageAry.unshift({style1:"Left",style2:"LContainer",style3:true,message:`${item.message}`})
+                            }
+                        });
+                        this.loadMorePage += 1
+                        this.loading = false
+                    }, 600);
+                }else{
+                    this.$message.error(this.mag)
+                }
+                
+            })
         },
         //在mounted阶段调用一次，在路由更新时调用一次
         initMessage(){
+            this.messageAry = []
             //调用接口初始化更新fromtoMssage
         },
         submit(){
-            let that = this
+            // let that = this
             document.getElementById('sendmsgBykey').addEventListener('keydown',(event)=>{
                 if(event.ctrlKey &&event.keyCode ==13){
-                    console.log(this.WS)
-                    this.WS.send(`{"chatListId":${this.nowItem.id},"message":"${this.textarea}","state":0,"toUserId":${this.nowItem.toUserid},"userId":${this.nowItem.fromUserid}}`)
-                    let chat = document.getElementById('chat')
-                    let Right = document.createElement('div')
-                    let RContainer = document.createElement('div')
-                    let p = document.createElement('p')
-                    let img = document.createElement('img')
-                    Right.className = "Right"
-                    RContainer.className = "RContainer"
-                    img.src = that.myHeadImg
-                    p.innerText = this.textarea
-                    RContainer.appendChild(p)
-                    RContainer.appendChild(img)
-                    Right.appendChild(RContainer)
-                    chat.appendChild(Right)
-                    
-                    this.textarea = ""
+                    if(this.textarea == ""){
+                        this.$message.warning("发送消息不能为空")
+                    }else{
+                        this.WS.send(`{"chatListId":${this.nowItem.id},"message":"${this.textarea}","state":0,"toUserId":${this.nowItem.toUserid},"userId":${this.nowItem.fromUserid}}`)
+                        this.messageAry.push({style1:"Right",style2:"RContainer",style3:false,message:`${this.textarea}`})
+                        this.textarea = ""
+                        setTimeout(() => {
+                            const chat = document.getElementById('chat')
+                            chat.scrollTop = chat.scrollHeight
+                        }, 100);
+                    }
                 }
             })
         },
         sendByClick(){
-            this.WS.send(this.textarea)
-            this.tomessage.push(this.textarea)
+            this.WS.send(`{"chatListId":${this.nowItem.id},"message":"${this.textarea}","state":0,"toUserId":${this.nowItem.toUserid},"userId":${this.nowItem.fromUserid}}`)
+            this.messageAry.push({style1:"Right",style2:"RContainer",style3:false,message:`${this.textarea}`})
             this.textarea = ""
+            const chat = document.getElementById('chat')
+            chat.scrollTop = chat.scrollHeight
         }
     },
     watch:{
         $route:function(to){
-            this.fromMessage = []
-            this.tomessage = []
             this.userID = to.params.userID
         },
-        message:function(){
-            let chat = document.getElementById('chat')
-            let Left = document.createElement('div')
-            let LContainer = document.createElement('div')
-            let p = document.createElement('p')
-            let img = document.createElement('img')
-            Left.className = "Left"
-            LContainer.className = "LContainer"
-            img.src = this.nowItem.user.headUrl
-            p.innerText = this.message
-            LContainer.appendChild(img)
-            LContainer.appendChild(p)
-            Left.appendChild(LContainer)
-            chat.appendChild(Left)
+        chatMsg:function(){
+            
+            if(this.chatMsg !== ""){
+                console.log("添加新消息")
+                this.messageAry.push({style1:"Left",style2:"LContainer",style3:true,message:`${this.chatMsg}`})
+            }
+            this.CLEAR_CHATMSG()
         }
     },
     beforeRouteUpdate (to,from,next) {
-    // 在当前路由改变，但是该组件被复用时调用
-    // 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候，
-    // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
-    // 可以访问组件实例 `this`
-    console.log(to,from)
-        this.initMessage()
+        // 在当前路由改变，但是该组件被复用时调用
+        // 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候，
+        // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
+        // 可以访问组件实例 `this`
+        this.initMessage(to,from)
         next()
     },
 }
@@ -158,6 +177,17 @@ export default {
     .el-main{
         flex: 1;
         background-color: #F5F5F5;
+        .loadMore{
+            width: 100%;
+            .more,.el-icon-loading{
+                text-align: center;
+                color: #98E165;
+                cursor: pointer;
+            }
+            .el-icon-loading{
+                width: 100%;
+            }
+        }
         .Left{
             margin-top:10px;
             width: 100%;

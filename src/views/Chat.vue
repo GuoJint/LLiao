@@ -22,12 +22,14 @@
             ">
                 <div class="CardContainer">
                     <div class="CardL">
-                        <img :src="item.user.headUrl" alt="头像">
+                        <el-badge :value="chatList[index].unread" class="item" :hidden="!(chatList[index].unread)">
+                            <img :src="item.user.headUrl" alt="头像">
+                        </el-badge>
                     </div>
                     <div class="CardM">
                         <div>
                             <h4>{{item.user.nick}}</h4>
-                            <p>{{lastmessage}}</p>
+                            <p>{{item.message}}</p>
                         </div>
                     </div>
                     <div class="CardR">
@@ -37,7 +39,7 @@
             </div>
         </div>
         <div class="chatMain">
-            <router-view :nowItem="nowItem" :message="message"></router-view>
+            <router-view :nowItem="nowItem"></router-view>
         </div>
     </div>
 </template>
@@ -46,43 +48,51 @@
 //删除添加节点的方式，onmessage收到的res如果为数组，0，1,2分别处理不同事物，比如0里面的数据用来接收当前用户消息，1里面的数据用来接收未读消息
 //当index为1时对获取未读消息的fromID把对应id节点删除掉，再重新添加置顶一个节点
 import {searchRequest  , chatListRequest } from '../api/chat'
-import { mapState } from 'vuex'
+import { mapState , mapMutations} from 'vuex'
 export default {
     name: 'Chat',
     data() { 
         return {
             state:'',
             searchResults:[],
-            chatList:[],
             selection:'',
             nowItem:'',
             token:'',
-            //聊天消息
-            message:'',
             //最后一次系列
             lastmessage:'',
-            lastTime:[]
+            lastTime:[],
+            //信息列表
+            chatList:[],
         }
     },
     computed:{
         ...mapState({
-            msgTransfer:'msgTransfer'
+            msgTransfer:'msgTransfer',
         })
     },
     watch:{
         msgTransfer:function(){
-            console.log(this.msgTransfer)
-            console.log("后端传过来的消息的ID："+this.msgTransfer.toUserId)
-            console.log("我所在的当前页面的ID："+this.$route.params.userID)
             if(this.$route.params.userID == undefined){
                 //将消息加入到未读中
                 console.log("未读消息")
+                this.chatList.forEach((item) =>{
+                    if(item.id == this.$route.params.userID){
+                        item.unread +=1
+                        item.message = this.msgTransfer.message
+                    }
+                })
             }else if(this.$route.params.userID == this.msgTransfer.toUserId){
                 //如果相等吧消息添加到对话框中
-                this.message = this.msgTransfer.message
+                this.SET_CHATMSG(this.msgTransfer.message)
             }else{
                 //加入未读中
                 console.log("不相等")
+                this.chatList.forEach((item) =>{
+                    if(item.id == this.$route.params.userID){
+                        item.unread +=1
+                        item.message = this.msgTransfer.message
+                    }
+                })
             }
         }
     },
@@ -92,6 +102,9 @@ export default {
         this.judgeIfAtRoom()
     },
     methods:{
+        ...mapMutations([
+            'SET_CHATMSG'
+        ]),
         //判断当前是否处于chatRoom
         judgeIfAtRoom(){
             console.log(this.$route.params.userID == undefined)
@@ -105,16 +118,13 @@ export default {
                     if(res.status == 500){
                         this.$message.error(res.msg)
                     }else{
+                        console.log(res.chatLists)
                         this.chatList = res.chatLists
-                        // setInterval(() => {
-                        //     this.chatList.push({"id":10,"fromUserid":2,"toUserid":1,"createtime":"2020-04-14 20:50:56","message":null,"unread":0,"user":{"id":1,"acount":"a1227ee","headUrl":"http://images.nowcoder.com/head/132t.png","nick":"张大爷","autograph":null,"region":null,"comments":null}})
-                        // }, 2000);
                         res.chatLists.forEach((item)=>{
                             // console.log(item.createtime)
                             this.lastTime.push(item.createtime)
                         })
                         this.lastTime = this.lastTime.map((item)=>{
-                            // console.log(item)
                             let arr = item.split("-")
                             const date = new Date()
                             let nowMonth = date.getMonth()
@@ -128,18 +138,14 @@ export default {
                                 }else{
                                     let showtime2 = item.split(" ")
                                     return showtime2[1]
-                                    // console.log(showtime2)
                                 }
                             }
                         })
                     }
-                    
-                    // console.log(this.lastTime)
                 }).catch((err)=>{
                     this.$message.error(err)
                 })
         },
-        
         //获取搜索框预搜索列表
         // loadResults() {
         //     loadRequest().then((res)=>{
@@ -178,6 +184,7 @@ export default {
             if(userID != this.$route.params.userID){
                 //indexList为ref数组
                 console.log(item)
+                this.chatList[index].unread = 0
                 this.nowItem = item
                 this.$refs.indexList.forEach(item => {
                     item.style.backgroundColor = ""

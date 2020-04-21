@@ -17,6 +17,13 @@
             ref="drawer"
             >
             <div class="demo-drawer__content">
+                <div class="demo-image__preview">
+                    <el-image 
+                        style="width: 100px; height: 100px"
+                        :src="url" 
+                        :preview-src-list="srcList">
+                    </el-image>
+                </div>
                 <el-form :model="form">
                     <el-form-item label="昵称:" label-width="80px">
                         <el-input v-model="form.name" autocomplete="off" :placeholder="nick"></el-input>
@@ -34,6 +41,14 @@
                         </el-select>
                     </el-form-item>
                 </el-form>
+                <div class="block">
+                    <el-cascader
+                        v-model="value"
+                        :options="options"
+                        @change="handleChange"
+                        placeholder="所在区域">
+                    </el-cascader>
+                </div>
                 <div class="demo-drawer__footer">
                     <el-button @click="handleClose">取 消</el-button>
                     <el-button type="primary">确定</el-button>
@@ -56,11 +71,26 @@ export default {
             WechatMoments:'',
             //用户信息设置
             userInfoVSB:false,
+            options:[{
+                value: 'China',
+                label: '中国',
+                children:[
+                    {
+                        value:'shanxi',
+                        label:'山西',
+                    }
+                ]
+            }],
             form:{
                 name:'',
                 qm:'',
                 sex:''
             },
+            url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+            srcList: [
+            'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
+            'https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg'
+            ],
             sex:'',
             nick:'',
             qm:'',
@@ -175,6 +205,18 @@ export default {
     }
     .myDrawer{
         .demo-drawer__content{
+            .demo-image__preview{
+                .el-image{
+                    margin-left: 150px;
+                }
+                i{
+                    display: inline-block;
+                    cursor: pointer;
+                    color: #fff;
+                    font-size: 30px;
+                    margin: 0;
+                }
+            }
             .el-form{
                 .el-form-item__content{
                     .el-input{

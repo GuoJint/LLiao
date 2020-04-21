@@ -20,5 +20,11 @@ const mutations = {
     SET_MSGTRANSFER(state,msgTransfer){
         state.msgTransfer = msgTransfer
     },
+    SET_CHATMSG(state,chatMsg){
+        state.chatMsg = chatMsg
+    },
+    CLEAR_CHATMSG(state){
+        state.chatMsg = ''
+    }
 }
 export default mutations

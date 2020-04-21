@@ -46,7 +46,11 @@ export default {
         sendMsg(id){
             addChat(id).then((res)=>{
                 console.log(res)
-                this.$router.push(`/chat/${res.id}`)
+                if(res.status == 500){
+                    this.$message.warning(res.msg)
+                }else{
+                    this.$router.push(`/chat/${res.id}`)
+                }
             })
         }
     }

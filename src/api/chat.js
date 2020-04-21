@@ -27,3 +27,14 @@ export const getToken = ()=>{
         method:'post',
     })
 }
+//获取更多消息记录
+export const getMoreRequest = (toId,page)=>{
+    return axios.request({
+        url:'/chat/record',
+        method:'post',
+        data:{
+            toId,
+            page
+        }
+    })
+}
