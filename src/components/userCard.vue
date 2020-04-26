@@ -31,6 +31,7 @@
 
 <script>
 import {addChat} from '../api/Contacts'
+import { mapMutations } from 'vuex'
 export default {
     name: 'userCard',
     props:{
@@ -43,13 +44,24 @@ export default {
     },
     methods:{
         //点击发送消息
+        ...mapMutations([
+            "SET_SENDMSG",
+            "SET_CHAT",
+            "SET_CONTACTS",
+            "SET_NOWROUTER"
+        ]),
         sendMsg(id){
             addChat(id).then((res)=>{
                 console.log(res)
                 if(res.status == 500){
                     this.$message.warning(res.msg)
                 }else{
-                    this.$router.push(`/chat/${res.id}`)
+                    //在chat中在mounted来判断如果从此页面进入
+                    this.SET_CHAT('active') 
+                    this.SET_CONTACTS('none') 
+                    this.SET_NOWROUTER('Chat')
+                    this.SET_SENDMSG(res.chatList)
+                    this.$router.push(`/chat/${res.chatList.toUserid}`)
                 }
             })
         }

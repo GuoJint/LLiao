@@ -7,13 +7,13 @@
             <el-main id="chat">
                 <div class="loadMore">
                     <i class="el-icon-loading" v-show="loading"></i>
-                    <p class="more" @click="loadMore" v-show="!loading">加载更多</p>
+                    <p class="more" @click="loadMore" v-if="noMore" v-show="!loading">加载更多</p>
                 </div>
                 <div :class="item.style1" v-for="(item,index) in messageAry" :key="index">
                     <div :class="item.style2" >
                         <img :src="nowItem.user.headUrl" v-if="item.style3" alt="">
                         <p>{{item.message}}</p>
-                        <img :src="nowItem.user.headUrl" v-if="!item.style3" alt="">
+                        <img :src="myHeadImg" v-if="!item.style3" alt="">
                     </div>
                 </div>
                 
@@ -39,13 +39,7 @@
                     </div>
                     
                 </div>
-                <el-input
-                id="sendmsgBykey"
-                type="textarea"
-                resize="none"
-                v-model="textarea"
-                >
-                </el-input>
+                <textarea ref="sendInput" class="userTextarea" v-model="textarea" cols="64" rows="7.5"></textarea>
                 <button class="sendButton" @click="sendByClick">发送消息</button>
             </el-footer>
         </el-container>
@@ -58,27 +52,28 @@ import {mapState , mapMutations} from 'vuex'
 import { getMoreRequest } from '../api/chat'
 export default {
     name: 'chatRoom',
-    props:{
-        nowItem:Object,
-    },
     data() { 
         return {
             loading:false,
+            noMore:true,
             loadMorePage:0,
             textarea:'',
             //
-            messageAry:[{style1:"Left",style2:"LContainer",style3:true,message:"sss"},{style1:"Right",style2:"RContainer",style3:false,message:"dd"},{style1:"Left",style2:"LContainer",style3:true,message:"ss"}]
+            messageAry:[]
         }
     },
     computed:{
         ...mapState({
             WS:"WS",
             myHeadImg:"myHeadImg",
-            chatMsg:"chatMsg"
+            chatMsg:"chatMsg",
+            nowItem:'nowItem',
         })
     },
     mounted(){
         this.submit()
+        this.loadMore()
+
     },
     methods:{
         ...mapMutations([
@@ -102,7 +97,12 @@ export default {
                         this.loading = false
                     }, 600);
                 }else{
-                    this.$message.error(this.mag)
+                    console.log(res)
+                    this.$message({
+                        message: '暂时任何没有聊天记录.',
+                        type: 'warning'
+                    });
+                    this.noMore = false
                 }
                 
             })
@@ -110,17 +110,22 @@ export default {
         //在mounted阶段调用一次，在路由更新时调用一次
         initMessage(){
             this.messageAry = []
+            this.loadMorePage = 0
             //调用接口初始化更新fromtoMssage
         },
         submit(){
             // let that = this
-            document.getElementById('sendmsgBykey').addEventListener('keydown',(event)=>{
+            this.$refs.sendInput.addEventListener('keydown',(event)=>{
                 if(event.ctrlKey &&event.keyCode ==13){
+                    this.textarea += '\n\r'
+                }else if(event.keyCode ==13){
+                                        console.log("fasong")
                     if(this.textarea == ""){
                         this.$message.warning("发送消息不能为空")
                     }else{
                         this.WS.send(`{"chatListId":${this.nowItem.id},"message":"${this.textarea}","state":0,"toUserId":${this.nowItem.toUserid},"userId":${this.nowItem.fromUserid}}`)
                         this.messageAry.push({style1:"Right",style2:"RContainer",style3:false,message:`${this.textarea}`})
+                        this.$emit('change-msg',this.textarea)
                         this.textarea = ""
                         setTimeout(() => {
                             const chat = document.getElementById('chat')
@@ -133,6 +138,7 @@ export default {
         sendByClick(){
             this.WS.send(`{"chatListId":${this.nowItem.id},"message":"${this.textarea}","state":0,"toUserId":${this.nowItem.toUserid},"userId":${this.nowItem.fromUserid}}`)
             this.messageAry.push({style1:"Right",style2:"RContainer",style3:false,message:`${this.textarea}`})
+            this.$emit('change-msg',this.textarea)
             this.textarea = ""
             const chat = document.getElementById('chat')
             chat.scrollTop = chat.scrollHeight
@@ -147,6 +153,10 @@ export default {
             if(this.chatMsg !== ""){
                 console.log("添加新消息")
                 this.messageAry.push({style1:"Left",style2:"LContainer",style3:true,message:`${this.chatMsg}`})
+                setTimeout(() => {
+                    const chat = document.getElementById('chat')
+                    chat.scrollTop = chat.scrollHeight
+                }, 100);
             }
             this.CLEAR_CHATMSG()
         }
@@ -157,6 +167,7 @@ export default {
         // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
         // 可以访问组件实例 `this`
         this.initMessage(to,from)
+        this.loadMore()
         next()
     },
 }
@@ -246,14 +257,14 @@ export default {
                 cursor: pointer;
             }
         }
-        .el-textarea{
-            .el-textarea__inner{
-                height: 150px;
-                padding: 5px 10px;
+        .userTextarea{
+                resize:none;
                 border: none;
                 color: #000000;
                 font-size: 18px;
-            }
+        }
+        .userTextarea:focus {
+            outline: none;
         }
         .sendButton{
             position: fixed;

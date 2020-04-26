@@ -1,8 +1,9 @@
 const state={
+    nowRouter:'',
     contactsTotalMSG:'',
     newFriendsMSG:'',
     chatTotalMSG:'',
-    friendReq:'',
+    friendReq:[],
     myHeadImg:'',
     myNick:'',
 
@@ -10,12 +11,20 @@ const state={
     WS:'',
     msgTransfer:'',
     chatMsg:'',
+    //chatRoom
+    nowItem:'',
+    //新增聊天
+    sendMsg:'',
 
     //用户信息
     phone:'',
     userImg:'',
     nick:'',
     sex:'',
+
+    //NavLeft图标样式控制
+    Chat:'',
+    Contacts:''
 
 }
 export default state

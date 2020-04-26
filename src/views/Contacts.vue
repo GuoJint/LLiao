@@ -103,13 +103,9 @@
                                 </div>
                             </div>
                             <div class="NFVRight">
-                                <div v-if="item.status==0?true:false">
-                                    <el-button size="small" type="success" @click="ifAccept(2,item.fromUserid)">接受</el-button>
-                                    <el-button size="small" type="success" @click="ifAccept(1,item.fromUserid)">拒绝</el-button>
-                                </div>
-                                <div v-else>
-                                    <p>{{item.status==2?"已接受":"已拒绝"}}</p>
-                                    <el-button size="small" type="success" plain @click="ifAccept(1,item.fromUserid)">删除</el-button>
+                                <div>
+                                    <el-button size="small" type="success" @click="ifAccept(2,item.fromUserid,index)">接受</el-button>
+                                    <el-button size="small" type="success" @click="ifAccept(1,item.fromUserid,index)">拒绝</el-button>
                                 </div>
                                 <p>{{item.createtime}}</p>
                             </div>
@@ -129,7 +125,7 @@
 
 <script>
 import {searchListRequest , searchUserRequest , ContactsListRequest , searchUserConfirm  ,ifAcceptRequest } from '../api/Contacts'
-import { mapState } from 'vuex'
+import { mapState , mapMutations} from 'vuex'
 export default {
     name: 'Contacts',
     data() { 
@@ -170,6 +166,11 @@ export default {
         }
     },
     methods:{
+        ...mapMutations([
+            'SET_FRIENDREQ',
+            'SUB_NEWFMSG',
+            'SUB_FRIENDREQ'
+        ]),
         //获取联系人列表
         getContactsList(){
             ContactsListRequest().then((res)=>{
@@ -270,25 +271,25 @@ export default {
             }
             this.$refs.newFriend.style.backgroundColor = "#C9C6C6"
             this.newFriendVsb = true
+            
             if(this.friendReq.length > 0){
                 this.newFriendFlag = true
             }else{
                 this.newFriendFlag = false
-            }
+            } 
         },
         //接受或拒绝
-        ifAccept(status,id){
-            console.log(id,status)
+        ifAccept(status,id,index){
             ifAcceptRequest(id,status).then((res)=>{
-                console.log(res)
                 if(res.status == 500){
                     this.$message.error(res.msg)
                 }else{
                     this.$message.success(res.msg)
                 }
+                this.SUB_NEWFMSG()
+                this.SUB_FRIENDREQ(index)
             })
         },
-
     },
     destroyed(){
         clearInterval(this.contactsListLoop)

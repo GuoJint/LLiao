@@ -38,3 +38,23 @@ export const getMoreRequest = (toId,page)=>{
         }
     })
 }
+//消除未读
+export const clearRead = (id)=>{
+    return axios.request({
+        url:'/chat/readMessage',
+        method:'post',
+        data:{
+            id
+        }
+    })
+}
+//增加未读
+export const addRead = (id)=>{
+    return axios.request({
+        url:'/chat/unReadMessage',
+        method:'post',
+        data:{
+            id
+        }
+    })
+}

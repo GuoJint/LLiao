@@ -1,7 +1,9 @@
 <template>
     <div class="NavLeftA">
         <img class="HeadPortrait" :src="myHeadImg" alt="头像" @click="userInfoVSB = true">
-        <i class="iconfont" :class="Chat" @click="toChat">&#xe624;</i>
+        <el-badge :value="chatTotalMSG" :max="99" type="success" :hidden="chatTotalFlag">
+            <i class="iconfont" :class="Chat" @click="toChat">&#xe624;</i>
+        </el-badge>
         <el-badge :value="newFriendsMSG" :max="99" type="success" :hidden="contactsFlag">
             <i class="iconfont" :class="Contacts" @click="toContacts">&#xe605;</i>
         </el-badge>
@@ -26,16 +28,16 @@
                 </div>
                 <el-form :model="form">
                     <el-form-item label="昵称:" label-width="80px">
-                        <el-input v-model="form.name" autocomplete="off" :placeholder="nick"></el-input>
+                        <el-input v-model="form.name" autocomplete="off" ></el-input>
                     </el-form-item>
                     <el-form-item label="个性签名:" label-width="80px">
-                        <el-input v-model="form.qm" autocomplete="off" :placeholder="qm"></el-input>
+                        <el-input v-model="form.qm" autocomplete="off" ></el-input>
                     </el-form-item>
                     <el-form-item label="手机号:" label-width="80px" >
-                        <el-input v-model="form.phone" autocomplete="off" :placeholder="phone"  disabled></el-input>
+                        <el-input v-model="form.phone" autocomplete="off" :placeholder="phone" disabled></el-input>
                     </el-form-item>
                     <el-form-item label="性别:" label-width="80px">
-                        <el-select v-model="form.sex" :placeholder="sex">
+                        <el-select v-model="form.sex" >
                             <el-option label="男" value="shanghai"></el-option>
                             <el-option label="女" value="beijing"></el-option>
                         </el-select>
@@ -60,17 +62,16 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState , mapMutations} from 'vuex'
 export default {
     name: 'NavLeftA',
     data() { 
         return {
-            nowRouter:'',
-            Chat:'',
-            Contacts:'',
             WechatMoments:'',
             //用户信息设置
             userInfoVSB:false,
+            //区域
+            value:'',
             options:[{
                 value: 'China',
                 label: '中国',
@@ -81,19 +82,18 @@ export default {
                     }
                 ]
             }],
+            //表单
             form:{
-                name:'',
+                nick:'',
                 qm:'',
                 sex:''
             },
+            //图片
             url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
             srcList: [
             'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
             'https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg'
             ],
-            sex:'',
-            nick:'',
-            qm:'',
             phone:13720904717
         }
     },
@@ -103,8 +103,20 @@ export default {
     computed:{
         ...mapState([
             "newFriendsMSG",
-            "myHeadImg"
+            "myHeadImg",
+            "chatTotalMSG",
+            "Chat",
+            "Contacts",
+            "nowRouter"
         ]),
+        chatTotalFlag:function(){
+            console.log(this.chatTotalMSG)
+            if(this.chatTotalMSG <=0){
+                return true
+            }else{
+                return false
+            }
+        },
         contactsFlag:function(){
             if(this.newFriendsMSG <=0){
                 return true
@@ -114,43 +126,52 @@ export default {
         }
     },
     methods:{
+        ...mapMutations([
+            'SET_CHAT',
+            'SET_CONTACTS',
+            'SET_NOWROUTER'
+        ]),
+        //所在区域的值
+        handleChange(value) {
+            console.log(value);
+        },
         getNowRouter(){
             // console.log(this.$route.name)
-            this.nowRouter = this.$route.name
+            this.SET_NOWROUTER(this.$route.name) 
             this.changeColor()
         },
         changeColor(){
             if(this.nowRouter == "Chat"){
-                this.Chat = 'active'
-                this.Contacts = 'none'
+                this.SET_CHAT('active') 
+                this.SET_CONTACTS('none') 
                 this.WechatMoments = 'none'
             }else if(this.nowRouter == "Contacts"){
-                this.Chat = 'none'
-                this.Contacts = 'active'
+                this.SET_CHAT('none') 
+                this.SET_CONTACTS('active') 
                 this.WechatMoments = 'none'
             }else if(this.nowRouter == "WechatMoments"){
-                this.Chat = 'none'
-                this.Contacts = 'none'
+                this.SET_CHAT('none') 
+                this.SET_CONTACTS('none')
                 this.WechatMoments = 'active'
             }
         },
         toChat(){
             if(this.nowRouter !== 'Chat'){
-                this.nowRouter = 'Chat'
+                this.SET_NOWROUTER('Chat') 
                 this.changeColor()
                 this.$router.push('/Chat')
             }
         },
         toContacts(){
             if(this.nowRouter !== 'Contacts'){
-                this.nowRouter = 'Contacts'
+                this.SET_NOWROUTER('Contacts') 
                 this.changeColor()
                 this.$router.push('/Contacts')
             }
         },
         toWechatMoments(){
             if(this.nowRouter !== 'WechatMoments'){
-                this.nowRouter = 'WechatMoments'
+                this.SET_NOWROUTER('WechatMoments')
                 this.changeColor()
                 this.$router.push('/WechatMoments/MomentsShow')
             }
@@ -240,6 +261,11 @@ export default {
                     }
                 }
                 
+            }
+            .block{
+                .el-cascader{
+                    margin-left: 20%;
+                }
             }
         }
         .demo-drawer__footer{

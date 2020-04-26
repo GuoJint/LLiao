@@ -15,6 +15,8 @@
 <script>
 import NavLeftA from '../components/NavLeftA'
 import {getToken} from '../api/chat'
+import {newFriendsRequest} from '../api/Contacts'
+import {authorizationRequest} from '../api/login.js'
 import { mapMutations ,mapState} from 'vuex'
 export default {
     name: 'home',
@@ -24,8 +26,9 @@ export default {
         }
     },
     mounted(){
-        // this.loadNewFriends()
+        this.loadNewFriends()
         this.getWSToken()
+        this.getHeadUrl()
     },
     computed:{
         ...mapState({
@@ -40,22 +43,26 @@ export default {
             "SET_FRIENDREQ",
             "SET_NEWFMSG",
             "SET_WS",
-            "SET_MSGTRANSFER"
+            "SET_MSGTRANSFER",
+            "SET_MYHEADIMG"
         ]),
         //加载新的朋友数据
-        // loadNewFriends(){
-        //     this.loadLoop =  setInterval(() => {
-        //         newFriendsRequest().then((res)=>{
-        //             // console.log(res)
-        //             let friendReq = res.friendReq
-        //             this.SET_FRIENDREQ(friendReq)
-        //             this.SET_NEWFMSG(friendReq.length)
-        //         })
-        //     }, 3000);
-        // },
+        loadNewFriends(){
+                newFriendsRequest().then((res)=>{
+                    // console.log(res)
+                    let friendReq = res.friendReq
+                    this.SET_FRIENDREQ(friendReq)
+                    this.SET_NEWFMSG(friendReq.length)
+                })
+        },
         getWSToken(){
             getToken().then((res)=>{
                 this.webscoket(res.token)
+            })
+        },
+        getHeadUrl(){
+            authorizationRequest().then((res)=>{
+                this.SET_MYHEADIMG(res.user.headUrl)
             })
         },
         webscoket(token){
