@@ -70,7 +70,6 @@ export default {
     computed:{
         ...mapState({
             msgTransfer:'msgTransfer',
-            sendMsg:'sendMsg',
             nowItem:'nowItem'
         }),
     },
@@ -120,6 +119,7 @@ export default {
             this.fromContacts()
         }, 100);
     },
+
     methods:{
         ...mapMutations([
             'SET_CHATMSG',
@@ -132,31 +132,44 @@ export default {
         fromContacts(){
             if(this.$route.params.userID){
                 this.chatList.forEach( (item,index) =>{
-                    if(item.id == this.sendMsg.id){
+                    // console.log(item)
+                    if(item.id == this.nowItem.id){
                         this.chatList.splice(index,1)
                         this.lastTime.splice(index,1)
                         this.lastMessage.splice(index,1)
-                        this.chatList.unshift(this.sendMsg)
+                        this.chatList.unshift(this.nowItem)
                         //剪切时间
                         
-                        let arr = this.sendMsg.createtime.split("-")
+                        let arr = this.nowItem.createtime.split("-")
                         const date = new Date()
                         let nowMonth = date.getMonth()
+                        console.log(arr)
+                        console.log(nowMonth)
                         if(parseInt(arr[1])==(nowMonth+1)){
                             let nowday = date.getDate()
                             if((nowday-parseInt(arr[2]))>=1){
-                                let splittime = this.sendMsg.createtime.split(" ")
+                                console.log("dd")
+                                //月份时间
+                                let splittime = this.nowItem.createtime.split(" ")
                                 splittime = splittime[0].split("-")
-                                this.sendMsg.createtime = splittime[1]+"-"+splittime[2]
+                                this.nowItem.createtime = splittime[1]+"-"+splittime[2]
                             }else{
-                                let showtime = this.sendMsg.createtime.split(" ")
-                                this.sendMsg.createtime = showtime[1]
+                                //小时时间
+                                console.log("ss")
+                                let showtime = this.nowItem.createtime.split(" ")
+                                this.nowItem.createtime = showtime[1]
                             }
+                        }else{
+                            let splittime = this.nowItem.createtime.split(" ")
+                            splittime = splittime[0].split("-")
+                            this.nowItem.createtime = splittime[1]+"-"+splittime[2]
                         }
-                        this.lastTime.unshift(this.sendMsg.createtime)
-                        this.lastMessage.unshift(this.sendMsg.message)
-                        this.SET_NOWITEM(this.sendMsg)
-                        this.changePeople(this.sendMsg.id,0,this.sendMsg)
+                        this.lastTime.unshift(this.nowItem.createtime)
+                        this.lastMessage.unshift(this.nowItem.message)
+                        this.SET_NOWITEM(this.nowItem)
+                        // console.log(`chat${this.sendMsg.id}`)
+                        // this.changePeople(this.sendMsg.id,0,this.sendMsg)
+                        // console.log('跳转2')
                     }
                 })
             }
@@ -170,14 +183,22 @@ export default {
                 if(parseInt(arr[1])==(nowMonth+1)){
                     let nowday = date.getDate()
                     if((nowday-parseInt(arr[2]))>=1){
+                        console.log("dd")
                         let splittime = item.split(" ")
                         splittime = splittime[0].split("-")
                         let showtime = splittime[1]+"-"+splittime[2]
                         return showtime
                     }else{
+                        
                         let showtime2 = item.split(" ")
+                        console.log(showtime2[1])
                         return showtime2[1]
                     }
+                }else{
+                    let splittime = item.split(" ")
+                        splittime = splittime[0].split("-")
+                        let showtime = splittime[1]+"-"+splittime[2]
+                        return showtime
                 }
             })
         },
@@ -191,7 +212,7 @@ export default {
         },
         //判断当前是否处于chatRoom
         judgeIfAtRoom(){
-            console.log(this.$route.params.userID == undefined)
+            // console.log(this.$route.params.userID == undefined)
             if(this.$route.path == "/Chat"){
                 console.log("sss")
             }
@@ -201,9 +222,10 @@ export default {
                 chatListRequest().then((res)=>{
                     if(res.status == 500){
                         this.$message.error(res.msg)
+                        this.$router.push('/login')
                     }else{
                         let totalMsg = 0
-                        console.log(res.chatLists)
+                        // console.log(res.chatLists)
                         this.chatList = res.chatLists
                         res.chatLists.forEach((item)=>{
                             // console.log(item.createtime)
@@ -252,6 +274,7 @@ export default {
             console.log(item);
         },
         changePeople(userID,index,item){
+            // console.log(`${item}`)
             //当点击同一次路由后不执行  此时通过route获取的userid为点击之前的所以当没有重复点击时userid也不同
             if(userID != this.$route.params.userID){
                 //indexList为ref数组
@@ -276,6 +299,18 @@ export default {
 .Chat{
     display: flex;
     .chatAside{
+        // &::-webkit-scrollbar {
+        //     width: 10px;
+        // }
+        // &::-webkit-scrollbar-thumb {
+        //     background-color: #2983bb;
+        //     // background-image: linear-gradient(160deg,#2e317c,#2983bb,#93b5cf);
+        //     border-radius: 10px;
+        // }
+        // &::-webkit-scrollbar-track {
+        //     background-color: #93b5cf;
+        //     // background-image: linear-gradient(160deg,#93b5cf,#2983bb,#2e317c);
+        // }
         overflow-y: scroll;
         width: 300px;
         height: 100vh;
@@ -289,6 +324,8 @@ export default {
             z-index: 10;
             width: 283px;
             height: 100px;
+            // background-image: linear-gradient(160deg,#93b5cf,#66a9c9);
+            // box-shadow: 3px 3px 3px 0 #93b5cf;/
             background-color: #EEEAE8;
             .CardInputContainer{
                 margin: 30px 0;

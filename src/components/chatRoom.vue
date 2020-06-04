@@ -58,7 +58,10 @@ export default {
             noMore:true,
             loadMorePage:0,
             textarea:'',
-            //
+            //timeOut设置loadmore延迟时间，timeflag判断是否是初次加载
+            tiemOut:0,
+            timeFlag:true,
+            //消息数组
             messageAry:[]
         }
     },
@@ -73,20 +76,33 @@ export default {
     mounted(){
         this.submit()
         this.loadMore()
-
     },
+    // beforeRouteEnter(to,from,next){
+    //     console.log(to)
+    //     console.log(from)
+    //     if(from.matched[1].path != "/Contacts"){
+    //         next()
+    //     }
+    // },
     methods:{
         ...mapMutations([
             'CLEAR_CHATMSG'
         ]),
+        //
         //加载消息记录
         loadMore(){
+            if(this.timeFlag){
+                this.tiemOut=600
+                this.timeFlag = false
+            }
             //调用接口往mssageAry中使用unshift添加数据
             getMoreRequest(parseInt(this.nowItem.toUserid),this.loadMorePage).then((res)=>{
+                
                 if(res.status == 200){
                     this.loading = true
                     setTimeout(() => {
                         res.record.forEach(item => {
+                            // console.log(item)
                             if(this.nowItem.toUserid !== item.userId){
                                 this.messageAry.unshift({style1:"Right",style2:"RContainer",style3:false,message:`${item.message}`})
                             }else{
@@ -95,9 +111,8 @@ export default {
                         });
                         this.loadMorePage += 1
                         this.loading = false
-                    }, 600);
+                    }, this.tiemOut);
                 }else{
-                    console.log(res)
                     this.$message({
                         message: '暂时任何没有聊天记录.',
                         type: 'warning'
@@ -151,7 +166,6 @@ export default {
         chatMsg:function(){
             
             if(this.chatMsg !== ""){
-                console.log("添加新消息")
                 this.messageAry.push({style1:"Left",style2:"LContainer",style3:true,message:`${this.chatMsg}`})
                 setTimeout(() => {
                     const chat = document.getElementById('chat')
@@ -168,8 +182,15 @@ export default {
         // 可以访问组件实例 `this`
         this.initMessage(to,from)
         this.loadMore()
+        this.tiemOut = 0
+        this.timeFlag = true
+        this.noMore = true
         next()
     },
+    beforeDestroy(){
+        this.initMessage()
+        console.log(`${this.messageAry}离开`)
+    }
 }
 </script>
 <style lang="scss">

@@ -31,9 +31,7 @@ const mutations = {
     CLEAR_CHATMSG(state){
         state.chatMsg = ''
     },
-    SET_SENDMSG(state,sendMsg){
-        state.sendMsg = sendMsg
-    },
+
     SET_CHATTOTALMSG(state,chatTotalMSG){
         state.chatTotalMSG = chatTotalMSG
     },

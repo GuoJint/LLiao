@@ -188,16 +188,20 @@ export default {
 <style lang="scss">
 .NavLeftA{
     height: 100%;
-    background-color: #27282C;
+    background-image: linear-gradient(160deg,#93b5cf,#2983bb,#2e317c);
+    background-size: 400%;
+    animation: bganimation 15s infinite;
     position: relative;
+    box-shadow: 3px 3px 3px 0 #93b5cf;
     .el-badge{
         margin: 0 40px 35px 40px;
         i{
             display: block;
             cursor: pointer;
-            color: #7F7F80;
+            color: #c4cbcf;
             font-size: 40px;
             margin: 0;
+            transition: all 1s;
         }
         .active{
             color: #07C160;
@@ -206,7 +210,7 @@ export default {
     i{
             display: block;
             cursor: pointer;
-            color: #7F7F80;
+            color: #c4cbcf;
             font-size: 40px;
             margin: 0 40px 35px 40px;
         }
@@ -220,6 +224,7 @@ export default {
         position: absolute;
         bottom: 20px;
         left: 40px;
+        color: #c4cbcf;
     }
     .active{
         color: #07C160;
@@ -273,6 +278,17 @@ export default {
             display: flex;
             justify-content: space-around;
         }
+    }
+}
+@keyframes bganimation {
+    0%{
+        background-position: 0% 50%;
+    }
+    50%{
+        background-position: 100% 50%;
+    }
+    100%{
+        background-position: 0% 50%;
     }
 }
 </style>

@@ -13,8 +13,6 @@ const state={
     chatMsg:'',
     //chatRoom
     nowItem:'',
-    //新增聊天
-    sendMsg:'',
 
     //用户信息
     phone:'',

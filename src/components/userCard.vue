@@ -48,11 +48,11 @@ export default {
             "SET_SENDMSG",
             "SET_CHAT",
             "SET_CONTACTS",
-            "SET_NOWROUTER"
+            "SET_NOWROUTER",
+            "SET_NOWITEM"
         ]),
         sendMsg(id){
             addChat(id).then((res)=>{
-                console.log(res)
                 if(res.status == 500){
                     this.$message.warning(res.msg)
                 }else{
@@ -60,8 +60,9 @@ export default {
                     this.SET_CHAT('active') 
                     this.SET_CONTACTS('none') 
                     this.SET_NOWROUTER('Chat')
-                    this.SET_SENDMSG(res.chatList)
+                    this.SET_NOWITEM(res.chatList)
                     this.$router.push(`/chat/${res.chatList.toUserid}`)
+                    
                 }
             })
         }

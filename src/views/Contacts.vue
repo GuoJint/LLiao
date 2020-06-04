@@ -301,6 +301,18 @@ export default {
 .Contacts{
     display: flex;
     .ContactsAside{
+        &::-webkit-scrollbar {
+            width: 10px;
+        }
+        &::-webkit-scrollbar-thumb {
+            background-color: #999999;
+            // background-image: linear-gradient(160deg,#2e317c,#2983bb,#93b5cf);
+            border-radius: 10px;
+        }
+    //     &::-webkit-scrollbar-track {
+    //         background-color: #93b5cf;
+    //         // background-image: linear-gradient(160deg,#93b5cf,#2983bb,#2e317c);
+    //     }
         overflow-y: scroll;
         width: 300px;
         height: 100vh;

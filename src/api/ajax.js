@@ -34,10 +34,13 @@ class HttpRequest{
 
         //可以在请求相应的时候进行验证头的携带，具体看demo
         instance.interceptors.response.use(res=>{
+            
             let data = res.data.extend
-            data.status = res.data.code
-            data.msg = res.data.mag
-            return data
+            if(data != undefined){
+                data.status = res.data.code
+                data.msg = res.data.mag
+                return data
+            }
         },err=>{
             console.log(err)
             return Promise.reject(err)
