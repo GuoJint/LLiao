@@ -86,8 +86,9 @@ export default {
             }
         }
         var checkPass = (rule,value,callback)=>{
-            let userPassword = this.ruleForm.userPassword
+            let userPassword = this.ruleForm.userPasswordReg
             if(userPassword!==value){
+                
                 callback(new Error("两次密码不一致"))
             }else{
                 callback()
@@ -102,8 +103,8 @@ export default {
             amt:'',
             ruleForm:{
                 acount:'',
-                userPassword:'',
                 accountReg:'',
+                userPassword:'',
                 userPasswordReg:'',
                 confirmPSW:'',
                 phone:'',
@@ -233,11 +234,12 @@ export default {
             this.$refs[formName].validate((valid)=>{
                 if(valid){
                     registerRequest(
-                        that.account,
-                        that.userPassword,
+                        that.accountReg,
+                        that.userPasswordReg,
                         that.phone,
                         that.verificationCode
                     ).then((res)=>{
+                        console.log(res)
                         if(res.status == 200){
                             this.$message({
                                 message:res.msg,
@@ -249,7 +251,7 @@ export default {
                                 type:'error'
                             })
                         }
-                        this.$router.push('/login')
+                        this.changeAmt
                     }).catch((err)=>{
                         console.log(err)
                         this.$message.error(err)
